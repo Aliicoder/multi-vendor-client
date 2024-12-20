@@ -25,7 +25,7 @@ const SignUpForm = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
-  const from = location?.state?.from?.pathname || "/"
+  const from = location?.state?.from?.pathname || "/home"
   const form = useForm<z.infer<typeof signupValidation>>({resolver: zodResolver(signupValidation)})
   const handleShowInput = (status:boolean) =>{
     if(status == true)

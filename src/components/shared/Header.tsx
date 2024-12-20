@@ -65,7 +65,7 @@ function Header() {
             </h1>
           </div>
 
-          <div onClick={()=>navigate("/account/orders")} className=" bg-slate-100 rounded-full" >
+          <div onClick={()=>navigate("account/orders")} className=" bg-slate-100 rounded-full" >
             <TiUser className='c7' />
           </div>
 

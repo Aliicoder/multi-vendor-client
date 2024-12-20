@@ -25,7 +25,7 @@ const LogInForm = () => {
   const dispatch = useDispatch()
   const location = useLocation()
   const [login,{isLoading}] = useLoginMutation()
-  const from = location?.state?.from?.pathname || "/" 
+  const from = location?.state?.from?.pathname || "/home" 
   const form = useForm<z.infer<typeof loginValidation>>({resolver: zodResolver(loginValidation),})
   const handleShowInput = (status:boolean) =>{
     if(status == true)

@@ -4,6 +4,7 @@ import PersistLoginMiddleware from "./components/middlewares/PersistLoginMiddlew
 import CategoryProductsPage from "./pages/private/CategoryProductsPage";
 import ShopProductsPage from "./pages/private/ShopProductsPage";
 import AddressesPage from "./pages/private/AddressesPage";
+import LoadCartAndWishlistMiddleware from "./components/middlewares/LoadCartAndWishlistMiddleware";
 const CartPage = lazy(() =>import("@/pages/private/CartPage"));
 const LogInPage = lazy(()=>import("./pages/public/LogInPage"))
 const SignUpPage = lazy(()=>import("./pages/public/SignUpPage"))
@@ -26,9 +27,11 @@ function App() {
       <Route element={<RootLayout/>}>
         <Route path="/login" element={<LogInPage/>} />
         <Route path="/signup" element={<SignUpPage/>} />
-        <Route path="/"  element={<MainLayout/>} >  
         <Route element={<PersistLoginMiddleware/>}>
+        <Route element={<LoadCartAndWishlistMiddleware/>}>
         <Route element={<ProtectedRoutesMiddleware/>}>
+        <Route path="/" >  
+        <Route path="/home"  element={<MainLayout/>}  >
           <Route index element={<HomePage/>} />
           <Route path="products/:productId" element={<ProductDetailsPage/>} />
           <Route path="categories/:categoryId" element={<CategoryProductsPage/>} />
@@ -43,6 +46,8 @@ function App() {
               <Route path=":chatId" element={<SellerChatPage/>} />
             </Route>
           </Route>
+        </Route>
+        </Route>
         </Route>
         </Route>
         </Route>

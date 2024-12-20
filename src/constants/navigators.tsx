@@ -20,21 +20,21 @@ export const mainNavigators:IMainNavigators[] = [
     title:"orders",
     segment:"orders",
     icon:<BiCartAlt />,
-    link:"/account/orders",
+    link:"/home/account/orders",
   },{
     title:"wishList",
     segment:"wishlist",
     icon:<TbTag />,
-    link:"/account/wishList",
+    link:"/home/account/wishList",
   },{
     title:"addresses",
     segment:"addresses",
     icon:<CiViewList />,
-    link:"/account/addresses",
+    link:"/home/account/addresses",
   },{
     title:"Chats",
     segment:"sellerschats",
     icon:<MdChatBubbleOutline />,
-    link:"/account/sellersChats"
+    link:"/home/account/sellersChats"
   }
 ]

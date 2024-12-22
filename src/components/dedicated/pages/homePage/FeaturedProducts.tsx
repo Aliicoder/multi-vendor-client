@@ -23,51 +23,49 @@ function FeaturedProducts() {
 
       <div className=" gap-4 p-3 | grid grid-cols-2  
         md:p-6 md:grid-cols-4">
-        {
-          response?.products && 
-          response?.products.map((product:IProduct) => 
-          <PrimaryCard key={product._id}>
-            <div className="relative flex  justify-center items-center overflow-hidden">
-              <img
-                className="scale-75 aspect-square object-contain group-hover:scale-90 transition-all"
-                src={product?.media[0].url}
-                loading="lazy"
-              />
-              <TagButton productId={product._id} />
-            </div>
+        { response?.products && response?.products.map((product:IProduct) => 
+        <PrimaryCard key={product._id}>
+          <div className="relative flex  justify-center items-center overflow-hidden">
+            <img
+              className="scale-75 aspect-square object-contain group-hover:scale-90 transition-all"
+              src={product?.media[0].url}
+              loading="lazy"
+            />
+            <TagButton productId={product._id} />
+          </div>
 
-            <div id="description" className="basis-1/3 shrink-0 gap-2 p-3  flex flex-col    
-              md:p-8 md:gap-2 ">
+          <div id="description" className="basis-1/3 shrink-0 gap-2 p-3  flex flex-col    
+            md:p-8 md:gap-2 ">
 
-              <h1 className="c4 py-3  font-semibold
-                md:c3 md:py-3">
-                {product.name}
-              </h1>
+            <h1 className="c4 py-3  font-semibold
+              md:c3 md:py-3">
+              {product.name}
+            </h1>
 
-              <div className="flex justify-between gap-2">
-                <div className="flex justify-center items-center">
-                  <h1 onClick={()=>navigate(`/home/shops/`)} 
-                    className="c3 text-center text hover:underline text-blue-500 cursor-pointer">
-                      {product.shopName}
-                  </h1>
-                </div>
-
-                <div className="flex justify-center items-center">
-                  <div className="c4  font-semibold grow 
-                    md:c3">
-                    ${product.price}
-                  </div>
-                </div>
+            <div className="flex justify-between gap-2">
+              <div className="flex justify-center items-center">
+                <h1 onClick={()=>navigate(`/home/shops/`)} 
+                  className="c3 text-center text hover:underline text-blue-500 cursor-pointer">
+                    {product.shopName}
+                </h1>
               </div>
 
-              <p className="line-clamp-2 c3
-                md:">
-                {product.description}
-              </p>
-
-              <CardButton product={product}/>
+              <div className="flex justify-center items-center">
+                <div className="c4  font-semibold grow 
+                  md:c3">
+                  ${product.price}
+                </div>
+              </div>
             </div>
-          </PrimaryCard>
+
+            <p className="line-clamp-2 c3
+              md:">
+              {product.description}
+            </p>
+
+            <CardButton product={product}/>
+          </div>
+        </PrimaryCard>
         )}
       </div>
     </div>

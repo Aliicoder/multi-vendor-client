@@ -1,5 +1,4 @@
 import Autoplay from "embla-carousel-autoplay"
-import { Card, CardContent } from "@/components/ui/card"
 import {
   Carousel,
   CarouselContent,
@@ -18,20 +17,16 @@ function BannerCarousel() {
   return (
     <Carousel
       plugins={[plugin.current]}
-      className="mt-2  container w-full
+      className="container 
         md:mx-auto"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
-    <CarouselContent className="mx-3 
-      md:mx-0">
+    <CarouselContent className="m-0">
       {IMAGES.map((url, index) => (
-        <CarouselItem className="" key={index}>
-          <Card className="">
-            <CardContent className="p-0 | flex  items-center justify-center ">
-              <img className="object-contain aspect-triangle  rounded-md" src={url} alt="" loading="lazy"/>
-            </CardContent>
-          </Card>
+        <CarouselItem  className=" p-0 D | flex items-center justify-center  | overflow-hidden  aspect-triangle w-full rounded-m 
+          md:rounded-md "  key={index}>
+          <img className="" src={url} alt="" loading="lazy"/>
         </CarouselItem>
       ))}
     </CarouselContent>

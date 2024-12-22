@@ -95,12 +95,13 @@ function Searchbar() {
       navigate(`${state.selectedOption}/${item._id}`,{state:{shop:item}})
   }
   return (
-    <div className="relative w-full md:w-1/2">
+    <div className="w-full sticky z-50 top-0  
+      md:w-1/2">
       <div className='p-2 | relative flex w-full  items-center '>   
 
         <Border cornerRadius={cornerRadius}
-          topStyle="w-full" 
-          bottomStyle='flex grow items-center  bg-slate-100  rounded-lg '>
+          topStyle="w-full  p-[1px] bg-blue-500" 
+          bottomStyle='flex  grow items-center  bg-slate-50  rounded-lg '>
           <div className="c8 mx-[2%] 
             md:c5">
             <CiSearch  className="m-1 cursor-pointer "/>
@@ -109,12 +110,12 @@ function Searchbar() {
           <input 
             onChange={handleSearchChange}
             placeholder={`search in "${state.selectedOption}"`}
-            className={` w-full py-2  c8  rounded-lg bg-slate-100 transition-all  outline-none
+            className={` w-full py-2  c8  rounded-lg bg-slate-50 transition-all  outline-none
                md:c4`}
             type="text" />   
 
           <div onClick={()=>dispatch({type:"CHANGE_VISIBILITY",payload:!state.visible})} 
-            className="c8 mx-[2%] 
+            className="c8 mr-3 border-l pl-3 mx-[2%] 
             md:c5">
             <HiOutlineAdjustmentsHorizontal />
           </div>
@@ -128,7 +129,7 @@ function Searchbar() {
          <ul  className='p-1 rounded-lg absolute bg-slate-200 z-[-1] top-0 w-full    '>
           <li className='p-1 relative z-[-1] h-full invisible mb-3   rounded-md  '>place holder</li>
           <li className='p-2 px-4 cursor-pointer   flex' >
-            searchf
+            search in
           </li>
           {
             state.options.map((option)=>(

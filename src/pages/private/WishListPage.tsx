@@ -4,16 +4,27 @@ import Border from "@/components/borders/Border";
 import { IProduct } from "@/utils/types/types";
 import { useSelector } from "react-redux";
 import { selectWishList } from "@/store/Reducers/wishListReducer";
+import CustomButton from "@/components/buttons/CustomButton";
+import { IoIosArrowBack } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 function WishListPage() {
-  const wishList = useSelector(selectWishList) ; console.log("wishList",wishList)
+  const wishList = useSelector(selectWishList) 
+  const navigate = useNavigate()
   const { deleteFromWhishList , addToCart } = useMutations()
   const addProductToCart = (productId:string) =>{
     addToCart(productId)
     deleteFromWhishList(productId)
   }
   return (
-    <div className='montserrat p-6 gap-2  flex flex-col overflow-y-scroll hide-scrollbar'>
-      <h1 className="font-semibold c3 p-6 "> Wish list</h1>
+    <div className='w-full  p-6 gap-2 | flex flex-col | montserrat overflow-y-scroll hide-scrollbar'>
+
+        <CustomButton onClick={()=>navigate(-1)}
+          className="c8 p-6 gap-3 |  flex items-center | bg-white rounded-xl 
+          md:hidden" 
+          direction="left" text="Wishlist">
+          <IoIosArrowBack />
+        </CustomButton>
+
       {
         wishList ?
           wishList?.products?.map((product:IProduct)=> (

@@ -11,9 +11,10 @@ interface AuthResponse {
     accessToken:string
   }
 }
+// https://ecommerceserver.alicoder.site/api/v1
 // http://localhost:3000/api/v1
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://ecommerceserver.alicoder.site/api/v1',
+  baseUrl: 'http://localhost:3000/api/v1',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;

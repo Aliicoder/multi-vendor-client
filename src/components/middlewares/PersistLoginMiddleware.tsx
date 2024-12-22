@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useRefreshMutation } from "@/store/apiSlices/authSlice";
 import { setCredentials } from "@/store/Reducers/authReducer";
+import Loader from "../portals/Loader";
 
 function PersistLoginMiddleware() { 
   const [ refreshMutation ] = useRefreshMutation();
@@ -24,6 +25,7 @@ function PersistLoginMiddleware() {
   },[])
   return (
     <>
+      <Loader isLoading={isLoading} />
       { 
         isLoading ? 
         null 

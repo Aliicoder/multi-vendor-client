@@ -8,9 +8,11 @@ import tryCatch from "@/utils/functions/tryCatch"
 import { IAddress } from "@/utils/types/types"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-
+import { IoIosArrowBack } from "react-icons/io";
+import { useNavigate } from "react-router-dom"
 function AddressesPage() {
   const [addAddress,setAddAddress] = useState(false)
+  const navigate = useNavigate()
   const  { addresses }  = useSelector(selectCurrentUser) 
   const [ editAddress,setEditAddress] = useState<IAddress|undefined>()
   const dispatch = useDispatch()
@@ -28,10 +30,22 @@ function AddressesPage() {
       <AddAddressPortal addAddress={addAddress} setAddAddress={setAddAddress} />
       <EditAddressPortal editAddress={editAddress} setEditAddress={setEditAddress} />
 
-      <PrimaryFrame className=" montserrat w-full flex flex-col overflow-y-scroll hide-scrollbar">
-        <h1 className="font-bold text-blue-600">My addresses</h1>
-        <div className="text-gray-950 mb-3" onClick={()=> setAddAddress(true)}>+ Add new address</div>
-        <div className="bg-white h-full min-w-full rounded-xl">
+      <PrimaryFrame className=" w-full  | flex flex-col overflow-y-scroll hide-scrollbar montserrat">
+
+        <CustomButton onClick={()=>navigate(-1)}
+          className="c8 p-6 gap-3 |  flex items-center | bg-white rounded-xl 
+          md:hidden" 
+          direction="left" text="mange addresses">
+          <IoIosArrowBack />
+        </CustomButton>
+
+        <h1 className="font-bold text-blue-600">
+          My addresses
+        </h1>
+        <div className="text-gray-950 mb-3" onClick={()=> setAddAddress(true)}>
+          + Add new address
+        </div>
+        <div className="grow | bg-white rounded-xl">
         {
           addresses.length > 0 &&
           addresses.map((address:IAddress)=>
@@ -42,10 +56,14 @@ function AddressesPage() {
             </div>
             <div className=" gap-3 | flex justify-end">
               <CustomButton onClick={()=>setEditAddress(address)}
-                className="c3 px-3 py-2 gap-3 flex items-center font-medium border rounded-lg  text-blue-500" text="edit">
+                className="c5 px-3 py-2 gap-3 | flex items-center | font-medium border rounded-lg  text-blue-500
+                  md:c3" 
+                text="edit">
               </CustomButton>
               <CustomButton onClick={()=>handleDeleteAddress(address._id)}
-                className="c3 px-3 py-2 gap-3 flex items-center font-medium border rounded-lg  text-red-600" text="delete">
+                className="c5 px-3 py-2 gap-3 | flex items-center | font-medium border rounded-lg  text-red-600
+                  md:c3" 
+                text="delete">
               </CustomButton>
             </div>
           </PrimaryFrame> 

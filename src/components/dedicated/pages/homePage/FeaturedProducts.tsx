@@ -2,10 +2,10 @@ import { useFetchFeaturedProductsQuery } from "@/store/apiSlices/productSlice";
 import { useNavigate } from "react-router-dom";
 import { IProduct } from "@/utils/types/types";
 import CardButton from "@/components/buttons/CardButton";
-import Border from "@/components/borders/Border";
 import TagButton from "@/components/buttons/TagButton";
 import CustomButton from "@/components/buttons/CustomButton";
 import { BsArrowRightShort } from "react-icons/bs";
+import PrimaryCard from "@/components/cards/PrimaryCard";
 function FeaturedProducts() { 
   const {data:response} = useFetchFeaturedProductsQuery({}); //console.log(response);
   const navigate = useNavigate()
@@ -21,15 +21,12 @@ function FeaturedProducts() {
         </CustomButton>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 p-6 md:grid-cols-4">
+      <div className=" gap-4 p-3 | grid grid-cols-2  
+        md:p-6 md:grid-cols-4">
         {
-          response?.products && response?.products.map((product:IProduct) => 
-          <Border
-            key={product._id}
-            onClick={()=>navigate(`/products/${product._id}`)}
-            topStyle="p-[1px]  bg-slate-200 "
-            bottomStyle="group flex flex-col h-full bg-white" 
-            cornerRadius={16}>
+          response?.products && 
+          response?.products.map((product:IProduct) => 
+          <PrimaryCard key={product._id}>
             <div className="relative flex  justify-center items-center overflow-hidden">
               <img
                 className="scale-75 aspect-square object-contain group-hover:scale-90 transition-all"
@@ -49,7 +46,7 @@ function FeaturedProducts() {
 
               <div className="flex justify-between gap-2">
                 <div className="flex justify-center items-center">
-                  <h1 onClick={()=>navigate("/products/:productId")} 
+                  <h1 onClick={()=>navigate(`/home/shops/`)} 
                     className="c3 text-center text hover:underline text-blue-500 cursor-pointer">
                       {product.shopName}
                   </h1>
@@ -67,10 +64,10 @@ function FeaturedProducts() {
                 md:">
                 {product.description}
               </p>
-              
+
               <CardButton product={product}/>
             </div>
-          </Border>    
+          </PrimaryCard>
         )}
       </div>
     </div>
@@ -78,3 +75,5 @@ function FeaturedProducts() {
 }
 
 export default FeaturedProducts;
+
+

@@ -1,4 +1,4 @@
-import React from "react"
+import ReactDOM from "react-dom";
 import { BarLoader } from "react-spinners"
 const overrideCss : React.CSSProperties = {
   position: "absolute",
@@ -8,17 +8,26 @@ const overrideCss : React.CSSProperties = {
   width: "100%",
 }
 type ConditionParams = {
-  condition: boolean
+  isLoading: boolean
 }
-const absoluteConditionalLoader = ({condition}:ConditionParams) => {
-  return ( 
-    <div className="absolute top-0 w-full">
+const absoluteConditionalLoader = ({isLoading}:ConditionParams) => {
+  
+  const portalElement = document.getElementById("portals");
+  if (!portalElement) {
+    return null; 
+  }
+
+  return ReactDOM.createPortal(
+   <>
       {
-        condition&&
-        <BarLoader cssOverride={overrideCss}/>
+        isLoading && 
+        <div className="absolute top-0 w-full">
+          <BarLoader cssOverride={overrideCss}/>
+        </div>
       }
-    </div>
-   );
+   </> ,
+    portalElement
+  )
 }
  
 export default absoluteConditionalLoader;

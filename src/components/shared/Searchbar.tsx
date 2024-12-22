@@ -7,6 +7,8 @@ import { useFetchCategoriesChunkMMutation } from "@/store/apiSlices/categorySlic
 import { useFetchSellersChunkMMutation } from "@/store/apiSlices/sellerSlice";
 import useSetTimeout from "@/hooks/useSetTimeout";
 import { useNavigate } from "react-router-dom";
+import Border from "../borders/Border";
+import useSquircle from "@/hooks/useSquircle";
 interface ISearch {
   name: string;
   visible:boolean
@@ -44,6 +46,7 @@ let reducerFunction = (state:ISearch,action:IActions) =>{
 function Searchbar() {
   const [state,dispatch] = useReducer(reducerFunction,initialState)
   const {timeouter} = useSetTimeout()
+  const cornerRadius = useSquircle()
   const navigate = useNavigate()
   let [fetchProducts] = useFetchProductsChunkMMutation()
   let [fetchCategories] = useFetchCategoriesChunkMMutation()
@@ -95,8 +98,10 @@ function Searchbar() {
     <div className="relative w-full md:w-1/2">
       <div className='p-2 | relative flex w-full  items-center '>   
 
-        <div className='flex grow items-center  bg-slate-100  rounded-lg '>
-          <div className="c7 mx-[2%] 
+        <Border cornerRadius={cornerRadius}
+          topStyle="w-full" 
+          bottomStyle='flex grow items-center  bg-slate-100  rounded-lg '>
+          <div className="c8 mx-[2%] 
             md:c5">
             <CiSearch  className="m-1 cursor-pointer "/>
           </div>
@@ -104,22 +109,26 @@ function Searchbar() {
           <input 
             onChange={handleSearchChange}
             placeholder={`search in "${state.selectedOption}"`}
-            className={` w-full py-2  c6  rounded-lg bg-slate-100 transition-all  outline-none
+            className={` w-full py-2  c8  rounded-lg bg-slate-100 transition-all  outline-none
                md:c4`}
             type="text" />   
-        </div>
 
-        <div onClick={()=>dispatch({type:"CHANGE_VISIBILITY",payload:!state.visible})} className="c7 mx-[2%] 
-          md:c5">
-          <HiOutlineAdjustmentsHorizontal />
-        </div>
+          <div onClick={()=>dispatch({type:"CHANGE_VISIBILITY",payload:!state.visible})} 
+            className="c8 mx-[2%] 
+            md:c5">
+            <HiOutlineAdjustmentsHorizontal />
+          </div>
+
+        </Border>
+
+        
 
       </div>
       { state.visible && 
          <ul  className='p-1 rounded-lg absolute bg-slate-200 z-[-1] top-0 w-full    '>
           <li className='p-1 relative z-[-1] h-full invisible mb-3   rounded-md  '>place holder</li>
           <li className='p-2 px-4 cursor-pointer   flex' >
-            search options
+            searchf
           </li>
           {
             state.options.map((option)=>(

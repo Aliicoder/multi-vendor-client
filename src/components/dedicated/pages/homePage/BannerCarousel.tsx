@@ -17,19 +17,19 @@ function BannerCarousel() {
   )
   return (
     <Carousel
-    plugins={[plugin.current]}
-    className="mt-2  container w-full
-      md:mx-auto"
-    onMouseEnter={plugin.current.stop}
-    onMouseLeave={plugin.current.reset}
-  >
-    <CarouselContent className="mx-12 ">
+      plugins={[plugin.current]}
+      className="mt-2  container w-full
+        md:mx-auto"
+      onMouseEnter={plugin.current.stop}
+      onMouseLeave={plugin.current.reset}
+    >
+    <CarouselContent className="mx-3 
+      md:mx-0">
       {IMAGES.map((url, index) => (
         <CarouselItem className="" key={index}>
-          <Card>
-            <CardContent className="p-0 | flex aspect-triangle overflow-hidden  items-center justify-center  
-              md:rounded-md ">
-              <img className="object-contain" src={url} alt="" loading="lazy"/>
+          <Card className="">
+            <CardContent className="p-0 | flex  items-center justify-center ">
+              <img className="object-contain aspect-triangle  rounded-md" src={url} alt="" loading="lazy"/>
             </CardContent>
           </Card>
         </CarouselItem>

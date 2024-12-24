@@ -1,7 +1,6 @@
 import ReactDOM from "react-dom";
 import AddAddressForm from "../forms/AddAddressForm";
-import PrimaryFrame from "../Frames/PrimaryFrame";
-import { IoIosCloseCircle } from "react-icons/io";
+import { MdClose } from "react-icons/md";
 interface IAddAddressPortal {
   addAddress:boolean
   setAddAddress:React.Dispatch<React.SetStateAction<boolean>>
@@ -17,13 +16,13 @@ function AddAddressPortal({addAddress,setAddAddress}:IAddAddressPortal) {
    <>
       {
         addAddress &&
-        <div className="absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2  ">
-          <PrimaryFrame>
-            <div onClick={()=>setAddAddress(false)} className=" p-2 | flex justify-end">
-              <IoIosCloseCircle className="c5" />
+        <div className="p-6 top-1/2 left-1/2 | absolute z-50 -translate-x-1/2 -translate-y-1/2 bg-white border rounded-lg">
+          <div>
+            <div onClick={()=>setAddAddress(false)} className=" flex justify-end">
+              <MdClose className="c9 m-4 scale-150 md:c5 md:scale-100" />
             </div>
             <AddAddressForm />
-          </PrimaryFrame>
+          </div>
         </div>
        
       }

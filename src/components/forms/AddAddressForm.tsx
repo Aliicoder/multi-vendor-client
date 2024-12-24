@@ -30,14 +30,15 @@ function AddAddressForm() {
   }
   return (
     <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8  bg-white border p-6 rounded-md">
-      <div className="flex rounded-md gap-3">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8  bg-white border ">
+      <div className="gap-3 | flex flex-wrap rounded-md ">
 
         <FormField
           control={form.control}
           name="type"
           render={({ field }) => (
-            <FormItem className="w-1/2 relative max-h-16">
+            <FormItem className="basis-full relative max-h-16 
+              md:basis-1/2">
               <FormLabel >Type</FormLabel>
               <Select  onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl className="border">
@@ -60,7 +61,8 @@ function AddAddressForm() {
           control={form.control}
           name="province"
           render={({ field }) => (
-            <FormItem className="basis-1/2">
+            <FormItem className=" basis-full
+              md:basis-1/2">
               <FormLabel>Province</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
@@ -72,13 +74,14 @@ function AddAddressForm() {
         />
 
       </div>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
 
         <FormField
           control={form.control}
           name="city"
           render={({ field }) => (
-            <FormItem className="basis-1/2">
+            <FormItem className=" basis-full
+              md:basis-1/2">
               <FormLabel>City</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />

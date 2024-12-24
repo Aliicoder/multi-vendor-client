@@ -1,105 +1,69 @@
-import { useState } from "react";
-import IconButton from "@/components/buttons/IconButton"
-import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "@/store/Reducers/authReducer";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import CheckOutCartProducts from "@/components/dedicated/pages/checkOutPage/CheckOutCartProducts";
-import CartSummery from "@/components/dedicated/pages/checkOutPage/CartSummery";
-import toast from "react-hot-toast";
-import { emptyTheCart } from "@/store/Reducers/cartReducer";
+import { useSelector } from "react-redux";
 import { selectActiveCart } from "@/store/Reducers/cartReducer";
-import { useCashOnDeliveryPaymentMutation } from "@/store/apiSlices/cartSlice";
-import { util } from "@/store/apiSlices/orderSlice";
-import { IAddress } from "@/utils/types/types";
-import { useNavigate } from "react-router-dom";
+import { IAddress, ICartOrder, IUnit } from "@/utils/types/types";
+import Border from "@/components/borders/Border";
+import QuantityButton from "@/components/buttons/QuantityButton";
+import NavigateBack from "@/components/shared/NavigateBack";
+import PlaceOrderBar from "@/components/dedicated/pages/checkOutPage/PlaceOrderBar";
+import ChangeAddressBar from "@/components/dedicated/pages/checkOutPage/ChangeAddressBar";
+import { useState } from "react";
+import PaymentInfoAndMethods from "@/components/dedicated/pages/checkOutPage/PaymentInfoAndMethods";
+import { selectCurrentUser } from "@/store/Reducers/authReducer";
 
-
+export type IPaymentOptions = "cod" | "card" | "upi"
 function CheckOutPage() {
-  const user = useSelector(selectCurrentUser)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const addresses:IAddress[] = user.addresses
+  const {addresses} = useSelector(selectCurrentUser)
+  const defaultAddress = addresses[0]
   const  cart  = useSelector(selectActiveCart)
-  const [isAddLocation,setIsAddLocation] = useState(false);
-  const [paymentMethod,setPaymentMethod] = useState("");
-  const [cashOnDeliveryPaymentMutation] = useCashOnDeliveryPaymentMutation()
-  const handlePaymentMethodChange = (paymentMethod:string) =>{
-    setPaymentMethod(paymentMethod)
-  }
-  const handleCashOnDelivery = async () =>{
-    if(paymentMethod  == "cod" && addresses[0] != null && cart != null  ){
-      try{
-        const response = await cashOnDeliveryPaymentMutation({cart,address:addresses[0]}).unwrap()
-        toast.success(response.message);
-        dispatch(emptyTheCart())
-        navigate("/dashboard/orders")
-        util.invalidateTags(["Orders"])
-      }catch(error:any){ }
-    }
-  }
-  const CashOnDelivery = () =>{
-    return <div className="flex justify-end">
-      <IconButton onClick={handleCashOnDelivery} className="cp-x-2_7 cp-y-1_4 font-semibold bg-transparent border text-black hover:text-slate-50" text="Place order" direction={"right"}>
-        
-      </IconButton>
-    </div>
-  }
+  const [paymentMethod,setPaymentMethod] = useState<IPaymentOptions|undefined>()
+  const [address,setAddress] = useState<IAddress>(defaultAddress)
   return (
-    <div className='container montserrat mx-auto flex h-[83svh] '>
+    <div className='container mx-auto | h-[calc(100vh_-_var(--placeOrderBar-height))] overflow-hidden flex flex-col  montserrat  
+      md:h-[100vh]'>
 
-       <div className="p-6 basis-6/12 flex flex-col gap-3 ">
-        <CartSummery />
-        <CheckOutCartProducts/>
-      </div>
+      <NavigateBack text="checkout" />
 
-      <div className="flex p-6 gap-2 basis-6/12 flex-col  ">
-        <div className="flex flex-col gap-3 bg-white p-6 border rounded-md">
-          {
-            isAddLocation ? 
-            <div></div>
-            :
-            (
-              user.addresses?.length > 0  ?
-              <>
-                <h1 className="font-semibold">Delivery Information</h1>
-                <div className="flex justify-between items-center">
-                  <h1 className="font-normal">to Ali Fahmi </h1>
-                </div>
-                <div className="flex gap-1 items-center">
-                  <div className="p-2 mr-2 bg-blue-500 border rounded-md font-bold text-white">{addresses[0]?.type}</div> 
-                  <p>{addresses[0]?.city},</p> <p>{addresses[0]?.area},</p> <p>{addresses[0]?.pinCode}</p>,
-                  <div  className="text-blue-500 hover:cursor-pointer hover:underline">change</div>
-                </div> 
-                </>
-              :
-              <div className="flex justify-center p-6 items-center">
-                <IconButton onClick={()=>setIsAddLocation(true)} text="add address" direction={"right"}>
-                  
-                </IconButton>
+      <div className=" h-full | flex flex-row" >
+        <div className=" basis-full gap-3 p-6 | flex flex-col  overflow-y-scroll hide-scrollbar
+          md:basis-9/12 ">
+            <PaymentInfoAndMethods className="!block md:!hidden" setPaymentMethod={setPaymentMethod} /> 
+
+          { cart?.orders && cart.orders.map((order:ICartOrder)=> ( order.units&&order.units.map((unit:IUnit)=>(
+            <Border key={unit?.productId?._id} 
+              bottomStyle="basis-3/12 shrink-0 flex gap-3 rounded-md bg-white " 
+              cornerRadius={16}>
+
+              <div className="basis-1/4 shrink-0 |  w-full  flex justify-center items-center overflow-hidden">
+                <img className="p-4 aspect-square object-contain 
+                  md:p-10 " src={unit?.productId?.media[0]?.url} alt="" />
               </div>
-            )
-          }
-          <h1 className=" font-semibold mt-5">Payment Methods </h1>
-          <Select onValueChange={handlePaymentMethodChange} >
-            <SelectTrigger  className="w-fit">
-              <SelectValue   placeholder="Choose Payment method" />
-            </SelectTrigger>
-            <SelectContent  className="montserrat">
-              <SelectItem  value="cod">cash on delivery</SelectItem>
-              <SelectItem disabled value="UPI">UPI</SelectItem>
-              <SelectItem disabled value="Stripe">Stripe</SelectItem>
-            </SelectContent>
-          </Select>
-          {
-            paymentMethod == "" ? 
-            <></>
-            : 
-            paymentMethod == "cod" ? 
-            <CashOnDelivery />
-            :
-            <></>
-          }
+
+              <div className="gap-3  | flex flex-col justify-center 
+                md:pl-6">
+                <h1 className="c2 font-semibold">
+                  {unit?.productId?.name}
+                </h1>
+                <p className="c2 line-clamp-3 ">
+                  {unit.productId?.description}
+                </p>
+                <h1 className="c2 font-semibold text-green-500">
+                  {unit?.productId?.stock > 9 ? " +9 stock" : `${unit?.productId?.stock} stock`} 
+                </h1>
+              </div>
+
+              <div className="flex ml-auto flex-col justify-between gap-2 p-6 ">
+                <div />
+                <h1 className="c2 text-center font-semibold">{unit.price}$</h1>
+                <QuantityButton unit={unit} />
+
+              </div> 
+            </Border>
+          )) )) }
         </div>
+        <PaymentInfoAndMethods setPaymentMethod={setPaymentMethod} /> 
+
+        <ChangeAddressBar address={address} setAddress={setAddress} />
+        <PlaceOrderBar address={address} paymentMethod={paymentMethod} />
       </div>
     </div>
   )

@@ -23,8 +23,8 @@
     --border-color: #e5e7eb;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
-    --header-height: 0px;
-    --mainNav-height: 0px;
+    --header-height :0;
+ 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;

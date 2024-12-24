@@ -13,10 +13,10 @@ function NormalHeader() {
   const user = useSelector(selectCurrentUser); 
   const navigate = useNavigate()
   useEffect(()=>{
-    trackElementHeight(refHeader)
+    trackElementHeight(refHeader,"--header-height")
   },[])
   return (
-    <div ref={refHeader} className='top-0 | sticky  border-b   
+    <div ref={refHeader} className='top-0 | sticky  border-b border-slate-100 
     before:content-[""] before:w-lvw  before:h-full before:left-0  before:absolute before:bg-white z-50 before:z-0'>
 
     <div className="z-10 relative container mx-auto p-[2%]  flex justify-between  flex-wrap  gap-3 ">

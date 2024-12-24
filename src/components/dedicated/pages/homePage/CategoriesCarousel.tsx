@@ -29,7 +29,7 @@ function CategoriesCarousel() {
       <div className="mx-auto flex overflow-x-scroll hide-scrollbar ">    
           { 
             response?.categories&&response?.categories.map((category:ICategory,i:number) => (
-             <div className="p-2 | shrink-0 basis-2/12  md:basis-4/2 lg:basis-2/12">
+             <div key={category.name} className="p-2 | shrink-0 basis-2/12  md:basis-4/2 lg:basis-2/12">
                 <Border key={category._id} cornerRadius={cornerRadius} 
                   onClick = {()=> navigate(`categories/${category._id}`,{state:{category}})}
                   topStyle=" p-[1px] bg-slate-200"

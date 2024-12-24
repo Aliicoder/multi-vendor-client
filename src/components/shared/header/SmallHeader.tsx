@@ -13,7 +13,7 @@ function Header() {
   const defaultAddress = addresses[0] 
   const navigate = useNavigate()
   useEffect(()=>{
-    trackElementHeight(refHeader)
+    trackElementHeight(refHeader,"--header-height")
   },[])
   return (
     <div ref={refHeader} >

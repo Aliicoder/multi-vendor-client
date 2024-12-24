@@ -1,5 +1,4 @@
 import ReactDOM from "react-dom";
-import PrimaryFrame from "../Frames/PrimaryFrame";
 import { IoIosCloseCircle } from "react-icons/io";
 import { IAddress } from "@/utils/types/types";
 import EditAddressForm from "../forms/EditAddressForm";
@@ -19,13 +18,13 @@ function EditAddressPortal({editAddress,setEditAddress}:IAddAddressPortal) {
       {
         editAddress  &&
         <div className="absolute top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2  ">
-          <PrimaryFrame>
+          <div>
             <div onClick={()=>setEditAddress(undefined)} className=" p-2 | flex justify-end">
               <IoIosCloseCircle className="c5" />
             </div>
 
             <EditAddressForm address={editAddress}/>
-          </PrimaryFrame>
+          </div>
         </div>
        
       }

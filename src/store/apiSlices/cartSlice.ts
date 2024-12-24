@@ -2,7 +2,9 @@ import { apiSlice } from "@/store/api/apiSlice"
 export const cartApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     fetchActiveCart:builder.query({
-      query:()=>`/cart`
+      query:()=>`/cart`,
+      providesTags:["Cart"]
+
     }),
     addProductAndFetch:builder.mutation({
       query:(credentials)=>{ //console.log("add to cart credentials",credentials)
@@ -22,10 +24,10 @@ export const cartApiSlice = apiSlice.injectEndpoints({
         }
       }
     }),
-    cashOnDeliveryPayment:builder.mutation({
-      query:(credentials)=>{ console.log("add to cart credentials",credentials)
+    checkout:builder.mutation({
+      query:(credentials)=>{ console.log("check out credentials ",credentials)
         return {
-          url:`/cart/cashOnDeliveryPayment`,
+          url:`/cart/checkout`,
           method:'post',
           body:credentials,
         }
@@ -34,8 +36,9 @@ export const cartApiSlice = apiSlice.injectEndpoints({
   })
 })
 export const {
+  util,
   useFetchActiveCartQuery,
   useAddProductAndFetchMutation,
   useDeleteProductAndFetchMutation,
-  useCashOnDeliveryPaymentMutation
+  useCheckoutMutation
 } = cartApiSlice

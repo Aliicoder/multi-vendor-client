@@ -1,5 +1,4 @@
 import CustomButton from "@/components/buttons/CustomButton"
-import PrimaryFrame from "@/components/Frames/PrimaryFrame"
 import AddAddressPortal from "@/components/portals/AddAddressPortal"
 import EditAddressPortal from "@/components/portals/EditAddressPortal"
 import { useDeleteAddressMutation } from "@/store/apiSlices/clientSlice"
@@ -30,7 +29,7 @@ function AddressesPage() {
       <AddAddressPortal addAddress={addAddress} setAddAddress={setAddAddress} />
       <EditAddressPortal editAddress={editAddress} setEditAddress={setEditAddress} />
 
-      <PrimaryFrame className=" w-full  | flex flex-col overflow-y-scroll hide-scrollbar montserrat">
+      <div className="p-6 w-full  | flex flex-col overflow-y-scroll hide-scrollbar montserrat">
 
         <CustomButton onClick={()=>navigate(-1)}
           className="c8 p-6 gap-3 |  flex items-center | bg-white rounded-xl 
@@ -49,7 +48,7 @@ function AddressesPage() {
         {
           addresses.length > 0 &&
           addresses.map((address:IAddress)=>
-          <PrimaryFrame className="gap-1 | flex flex-col border-b border-slate-200">
+          <div className="gap-1 | flex flex-col border-b border-slate-200">
             <div className="flex items-center">
               <div className="p-2 mr-2 bg-blue-500 border rounded-md font-bold text-white">{address.type}</div> 
               <p>{address.city},</p> <p>{address.area},</p> <p>{address.pinCode}</p>
@@ -66,11 +65,11 @@ function AddressesPage() {
                 text="delete">
               </CustomButton>
             </div>
-          </PrimaryFrame> 
+          </div> 
           )
         }
         </div>
-      </PrimaryFrame>
+      </div>
     </>
   )
 }

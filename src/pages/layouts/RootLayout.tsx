@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast"
 import { Outlet } from "react-router-dom"
-function MainLayout() { 
+function RootLayout() { 
   return (
     < >
       <Outlet />
@@ -15,4 +15,4 @@ function MainLayout() {
   )
 }
 
-export default MainLayout
+export default RootLayout

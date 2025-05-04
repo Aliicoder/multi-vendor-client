@@ -1,86 +1,127 @@
-import { apiSlice } from "@/store/api/apiSlice"
-const DEFAULT_LIMIT = 8, DEFAULT_PAGE = 1;
+import { apiSlice } from "@/store/api/apiSlice";
 export const productApiSlice = apiSlice.injectEndpoints({
-  endpoints: builder => ({
-    FetchProduct:builder.query({
-      query:credentials=>({
-        url:`/product/${credentials.productId}`,
-        method:'GET',
-      })
+  endpoints: (builder) => ({
+    getProduct: builder.query({
+      query: (credentials) => ({
+        url: `/products/${credentials.productId}`,
+        method: "GET",
+      }),
     }),
-    FetchProductsChunkQ:builder.query({ 
-      query:({perPage,curPage,sort,_id,name,shopName,outOfStock,category})=>{
-        let sortBy = sort ? Object.values(sort) : [] 
+    getPaginatedProductsQ: builder.query({
+      query: ({
+        perPage,
+        curPage,
+        sort,
+        _id,
+        name,
+        brand,
+        shopName,
+        outOfStock,
+        category,
+      }) => {
         const queryString = [
-           curPage ? `curPage=${curPage}` : `curPage=${DEFAULT_PAGE}`,
-           perPage ? `perPage=${perPage}` : `perPage=${DEFAULT_LIMIT}`,
-           sortBy && `sortBy=${sortBy}`,
-           _id && `_id=${_id}`,
-           name && `name=${name}`,
-           shopName && `shopName=${shopName}`,
-           outOfStock && `outOfStock=false`,
-           category && `category=${category}`
+          _id && `_id=${_id}`,
+          name && `name=${name}`,
+          brand && `brand=${brand}`,
+          shopName && `shopName=${shopName}`,
+          outOfStock && `outOfStock=false`,
+          category && `category=${category}`,
+          curPage && `curPage=${curPage}`,
+          perPage && `perPage=${perPage}`,
+          sort && `sort=${sort}`,
         ]
           .filter(Boolean)
           .join("&&");
-          console.log("product query string >>",queryString);
-        return `/product/chunk?${queryString}`
+        console.log("products chunk 1 query string >>", queryString);
+        return `/products/paginated?${queryString}`;
       },
-      providesTags:["Products"]
+      providesTags: ["Products"],
     }),
-    FetchProductsChunkM:builder.mutation({ 
-      query:({perPage,curPage,sort,_id,name,shopName,outOfStock,category})=>{
-        let sortBy = sort ? Object.values(sort) : [] 
+    getPaginatedProductsM: builder.mutation({
+      query: ({
+        perPage,
+        curPage,
+        sort,
+        _id,
+        name,
+        shopName,
+        outOfStock,
+        category,
+      }) => {
         const queryString = [
-          curPage ? `curPage=${curPage}` : `curPage=${DEFAULT_PAGE}`,
-          perPage ? `perPage=${perPage}` : `perPage=${DEFAULT_LIMIT}`,
-          sortBy && `sortBy=${sortBy}`,
           _id && `_id=${_id}`,
           name && `name=${name}`,
           shopName && `shopName=${shopName}`,
           outOfStock && `outOfStock=false`,
-          category && `category=${category}`
+          category && `category=${category}`,
+          curPage && `curPage=${curPage}`,
+          perPage && `perPage=${perPage}`,
+          sort && `sort=${sort}`,
         ]
           .filter(Boolean)
           .join("&&");
-          console.log("product query string >>",queryString);
-        return `/product/chunk?${queryString}`
+        console.log("products chunk query string >>", queryString);
+        return `/products/paginated?${queryString}`;
       },
     }),
-    FetchFeaturedProducts:builder.query({
-      query:()=>{
-        return{
-          url:`/product/featuredProducts`,
-          method:'GET',
-        }
-      }  
+    getFeaturedProducts: builder.query({
+      query: () => {
+        return {
+          url: `/products/featuredProducts`,
+          method: "GET",
+        };
+      },
     }),
-    FetchFilteredProducts:builder.mutation({
-      query:credentials=>{
-        console.log("credentials >>",credentials)
-        return{
-          url:`/product/filteredProducts?searchValue=${credentials?.searchValue}&&curPage=${credentials?.curPage}&&perPage=${credentials?.perPage}&&price[gte]=${credentials?.queryParams?.minPrice}&&price[lte]=${credentials?.queryParams?.maxPrice}&&category=${credentials?.queryParams?.category}&&rating=${credentials?.queryParams?.rating}`,
-          method:'GET',
-        }
-      }  
+    getFilteredProducts: builder.mutation({
+      query: ({
+        searchValue,
+        curPage,
+        perPage,
+        minPrice,
+        maxPrice,
+        category,
+        rating,
+      }) => {
+        const queryString = [
+          searchValue && `searchValue=${searchValue}`,
+          curPage && `curPage=${curPage}`,
+          perPage && `perPage=${perPage}`,
+          minPrice && `price[gte]=${minPrice}`,
+          maxPrice && `price[lte]=${maxPrice}`,
+          category && `category=${category}`,
+          rating && `rating=${rating}`,
+        ]
+          .filter(Boolean)
+          .join("&&");
+
+        console.log("filtered products query string >>", queryString);
+
+        return `/products/filteredProducts?${queryString}`;
+      },
     }),
-    FetchSearchedProducts:builder.mutation({
-      query:credentials=>{
-        console.log("credentials >>",credentials)
-        return{
-          url:`/product/search?searchValue=${credentials.searchValue}&&category=${credentials.category}`,
-          method:'GET',
-        }
-      }  
+    getSearchedProducts: builder.query({
+      query: ({ name }) => {
+        const queryString = [name && `name=${name}`].filter(Boolean).join("&&");
+        console.log("products search query string >>", queryString);
+        return `/products/search?${queryString}`;
+      },
     }),
-  })
-})
+    getAiSearchedProducts: builder.mutation({
+      query: (credentials) => ({
+        url: "/products/ai-search",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
+  }),
+});
 export const {
   util,
- useFetchProductsChunkMMutation,
- useFetchFeaturedProductsQuery,
- useFetchProductsChunkQQuery,
- useFetchProductQuery,
- useFetchFilteredProductsMutation,
- useFetchSearchedProductsMutation
-} = productApiSlice
+  useGetProductQuery,
+  useGetFeaturedProductsQuery,
+  useGetAiSearchedProductsMutation,
+  useGetFilteredProductsMutation,
+  useGetPaginatedProductsMMutation,
+  useGetPaginatedProductsQQuery,
+  useGetSearchedProductsQuery,
+} = productApiSlice;

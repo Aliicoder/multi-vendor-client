@@ -11,7 +11,10 @@ import { IoCart } from "react-icons/io5";
 import { HiTag } from "react-icons/hi2";
 import { useEffect, useRef } from "react";
 import { trackElementHeight } from "@/utils/functions/resizeTrackers";
-function BottomBar() {
+interface IBottomBar{
+  className?: string
+}
+function BottomBar({className}:IBottomBar) {
   const refBottomBar = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const lastSegment = useLastSegment()
@@ -21,8 +24,7 @@ function BottomBar() {
   },[])
   return (
     <div ref={refBottomBar}
-      className="p-3 bottom-0 left-0  w-full  | z-40  fixed flex justify-evenly bg-white border-t 
-      md:hidden">
+      className={className}>
         <div onClick={()=>navigate("/home")} className="gap-2  | relative flex flex-col items-center" >
         {
           lastSegment === "home" ?

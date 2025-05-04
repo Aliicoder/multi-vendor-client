@@ -1,50 +1,51 @@
-import { apiSlice } from "@/store/api/apiSlice"
+import { apiSlice } from "@/store/api/apiSlice";
 export const chatApiSlice = apiSlice.injectEndpoints({
-  endpoints: builder => ({
-    FetchChats:builder.query({
-      query:()=>{ //console.log("Fetch chat credentials",credentials)
+  endpoints: (builder) => ({
+    getChats: builder.query({
+      query: (credentials) => {
         return {
-          url:`/chat/client`,
-          method:'GET',
-        }
+          url: `/chats?userType=${credentials.userType}`,
+          method: "GET",
+        };
       },
       providesTags: ["Chats"],
     }),
-    establishChat:builder.mutation({
-      query:(credentials)=>{ //console.log("Fetch chat credentials",credentials)
+    establishChat: builder.mutation({
+      query: (credentials) => {
         return {
-          url:`/chat/client/seller/establish/${credentials.sellerId}`,
-          method:'GET',
-        }
-      }
+          url: `/chats`,
+          method: "POST",
+          body: credentials,
+        };
+      },
     }),
-    FetchChatMessages:builder.query({
-      query:(credentials)=>{ //console.log("Fetch chat credentials",credentials)
+    getChatMessages: builder.query({
+      query: (credentials) => {
         return {
-          url:`/chat/client/seller/${credentials.chatId}`,
-          method:'GET',
+          url: `/chats/${credentials.chatId}`,
+          method: "GET",
         };
       },
       providesTags: ["Messages"],
     }),
-    addMessage:builder.mutation({
-      query:(credentials)=>{ //console.log("addMessage credentials",credentials)
+    addMessage: builder.mutation({
+      query: (credentials) => {
         return {
-          url:`/chat/client/seller/${credentials.chatId}`,
-          method:'POST',
-          body:{
-            message:credentials.message,
-            receiverId:credentials.receiverId
-          }
+          url: `/chats/${credentials.chatId}`,
+          method: "POST",
+          body: {
+            message: credentials.message,
+            receiverId: credentials.receiverId,
+          },
         };
       },
-      invalidatesTags: ["Chats"]
+      invalidatesTags: ["Chats"],
     }),
-  })
-})
+  }),
+});
 export const {
+  useGetChatsQuery,
+  useGetChatMessagesQuery,
   useEstablishChatMutation,
-  useFetchChatsQuery,
-  useFetchChatMessagesQuery,
   useAddMessageMutation,
-} = chatApiSlice
+} = chatApiSlice;

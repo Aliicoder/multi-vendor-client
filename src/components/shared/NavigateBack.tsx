@@ -10,7 +10,7 @@ function NavigateBack({text}:INavigateBack) {
     <CustomButton onClick={()=>navigate(-1)}
       className="c8 p-6 gap-3 |  flex items-center | bg-slate-50" 
       direction="left" text={text}  >
-      <IoIosArrowBack />
+      <IoIosArrowBack className='c6' />
     </CustomButton>
   )
 }

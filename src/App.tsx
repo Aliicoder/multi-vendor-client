@@ -1,61 +1,69 @@
-import { Route, Routes } from "react-router-dom"
-import { lazy } from "react"
-import PersistLoginMiddleware from "./components/middlewares/PersistLoginMiddleware";
+import { Route, Routes } from "react-router-dom";
 import CategoryProductsPage from "./pages/private/CategoryProductsPage";
 import ShopProductsPage from "./pages/private/ShopProductsPage";
 import AddressesPage from "./pages/private/AddressesPage";
-import LoadCartAndWishlistMiddleware from "./components/middlewares/LoadCartAndWishlistMiddleware";
-const CartPage = lazy(() =>import("@/pages/private/CartPage"));
-const LogInPage = lazy(()=>import("./pages/public/LogInPage"))
-const SignUpPage = lazy(()=>import("./pages/public/SignUpPage"))
-const HomePage = lazy(()=>import("./pages/private/HomePage"))
-const CheckOutPage = lazy(()=>import("./pages/private/CheckOutPage"))
-const ProductDetailsPage = lazy(()=>import("./pages/private/ProductDetailsPage"))
-const WishListPage = lazy(()=>import("@/pages/private/WishListPage"));
-const ProtectedRoutesMiddleware = lazy(()=>import("@/components/middlewares/ProtectedRoutes"));
-const OrdersPage = lazy(()=>import("@/pages/private/OrdersPage"));
-const SellersChatsLayout = lazy(()=>import("@/pages/layouts/SellersChatsLayout"));
-const SellerChatPage = lazy(()=>import("@/pages/private/SellerChatPage"));
-const MainLayout = lazy(()=>import("@/pages/layouts/MainLayout"));
-const RootLayout = lazy(()=>import("@/pages/layouts/RootLayout"));
-const AccountLayout = lazy(()=>import("@/pages/layouts/AccountLayout"));
-
+import ProductsPage from "./pages/private/ProductsPages";
+import AISearchPage from "./pages/private/AISearchpage";
+import RootLayout from "./pages/layouts/RootLayout";
+import LogInPage from "./pages/public/LogInPage";
+import HomePage from "./pages/private/HomePage";
+import OrdersPage from "./pages/private/OrdersPage";
+import CheckOutPage from "./pages/private/CheckOutPage";
+import SellersChatsLayout from "./pages/layouts/SellersChatsLayout";
+import SellerChatPage from "./pages/private/SellerChatPage";
+import AccountLayout from "./pages/layouts/AccountLayout";
+import WishListPage from "./pages/private/WishListPage";
+import ProductDetailsPage from "./pages/private/ProductDetailsPage";
+import MainLayout from "./pages/layouts/MainLayout";
+import TrackOrderPage from "./pages/private/TrackOrderPage";
+import SignupPage from "./pages/public/SignupPage";
+import PersistLoginMiddleware from "./pages/middlewares/PersistLoginMiddleware";
+import LoadRequirements from "./pages/middlewares/LoadRequirementsMiddleware";
+import ProtectedRoutesMiddleware from "./pages/middlewares/ProtectedRoutesMiddleware";
+import CancelPayment from "./pages/private/CancelPayment";
+import CompletePayment from "./pages/private/CompletePayment";
 
 function App() {
   return (
     <Routes>
-      <Route element={<RootLayout/>}>
-        <Route path="/login" element={<LogInPage/>} />
-        <Route path="/signup" element={<SignUpPage/>} />
-        <Route element={<PersistLoginMiddleware/>}>
-        <Route element={<LoadCartAndWishlistMiddleware/>}>
-        <Route element={<ProtectedRoutesMiddleware/>}>
-        <Route path="/" >  
-        <Route path="/home"  element={<MainLayout/>}  >
-          <Route index element={<HomePage/>} />
-          <Route path="products/:productId" element={<ProductDetailsPage/>} />
-          <Route path="categories/:categoryId" element={<CategoryProductsPage/>} />
-          <Route path="shops/:shopId" element={<ShopProductsPage/>} />
-          <Route path="cart" element={<CartPage/>} />
-          <Route path="cart/checkout" element={<CheckOutPage/>} />
-          <Route path="account" element={<AccountLayout/>}>
-            <Route path="orders" element={<OrdersPage/>} />
-            <Route path="wishList" element={<WishListPage/>} />
-            <Route path="addresses" element={<AddressesPage/>} />
-            <Route path="sellersChats" element={<SellersChatsLayout/>}>
-              <Route path=":chatId" element={<SellerChatPage/>} />
+      <Route element={<RootLayout />}>
+        <Route path="/login" element={<LogInPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route element={<PersistLoginMiddleware />}>
+          <Route element={<LoadRequirements />}>
+            <Route element={<ProtectedRoutesMiddleware />}>
+              <Route path="/" element={<MainLayout />}>
+                <Route path="complete-payment" element={<CompletePayment />} />
+                <Route path="cancel-payment" element={<CancelPayment />} />
+                <Route index element={<HomePage />} />
+                <Route path="products" element={<ProductsPage />} />
+                <Route path="ai-search" element={<AISearchPage />} />
+                <Route
+                  path="products/:productId"
+                  element={<ProductDetailsPage />}
+                />
+                <Route
+                  path="categories/:categoryId"
+                  element={<CategoryProductsPage />}
+                />
+                <Route path="shops/:shopName" element={<ShopProductsPage />} />
+                <Route path="cart" element={<CheckOutPage />} />
+                <Route path="account" element={<AccountLayout />}>
+                  <Route path="orders" element={<OrdersPage />} />
+                  <Route path="orders/:orderId" element={<TrackOrderPage />} />
+                  <Route path="wishList" element={<WishListPage />} />
+                  <Route path="addresses" element={<AddressesPage />} />
+                  <Route path="chats" element={<SellersChatsLayout />}>
+                    <Route path=":chatId" element={<SellerChatPage />} />
+                  </Route>
+                </Route>
+              </Route>
             </Route>
           </Route>
         </Route>
-        </Route>
-        </Route>
-        </Route>
-        </Route>
       </Route>
     </Routes>
-  )
+  );
 }
 
-export default App
-
-
+export default App;

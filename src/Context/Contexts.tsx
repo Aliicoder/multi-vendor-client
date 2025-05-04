@@ -1,12 +1,13 @@
-import { PropsWithChildren } from 'react'
-import ThemeProvider from './ThemeContext'
-interface ThemeContext extends PropsWithChildren{}
-function Contexts({children}:ThemeContext){
+import { PropsWithChildren } from "react";
+import CurrencyProvider from "./Currency";
+import OpenSidebarProvider from "./OpenSidebar";
+interface ThemeContext extends PropsWithChildren {}
+function Contexts({ children }: ThemeContext) {
   return (
-    <ThemeProvider>
-      {children}
-    </ThemeProvider>
-  )
+    <CurrencyProvider>
+      <OpenSidebarProvider>{children}</OpenSidebarProvider>
+    </CurrencyProvider>
+  );
 }
 
-export default Contexts
+export default Contexts;

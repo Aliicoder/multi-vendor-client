@@ -1,4 +1,4 @@
-import { ICounter } from "@/utils/types/types";
+import { ICounter } from "@/types/types";
 import { useCallback, useEffect, useState } from "react"
 import { useFetchSellersChunkQQuery , util } from "@/store/apiSlices/sellerSlice";
 import { useDispatch } from "react-redux";

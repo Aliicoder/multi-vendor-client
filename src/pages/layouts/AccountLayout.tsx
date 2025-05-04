@@ -1,24 +1,15 @@
-import { Outlet } from "react-router-dom"
-import { useRef } from "react"
-import SideBar from "@/components/layouts/SideBar"
-import useScreenSize from "@/hooks/useScreenSize"
-import BottomBar from "@/components/shared/BottomBar"
-
+import { Outlet } from "react-router-dom";
+import SideBar from "@/components/layouts/SideBar";
 
 function AccountLayout() {
-  const refProfileLayout = useRef<HTMLDivElement>(null)
-  const screenSize = useScreenSize()
   return (
-    <div ref={refProfileLayout} style={{ height: screenSize != "sm" ? `calc(100vh_-_var(--header-height))`: "100vh" }} 
-      className={`relative container mx-auto flex `}>
-  
-      <SideBar />
-      <Outlet/>
-      <BottomBar />
-    </div>
-  )
+    <>
+      <div className="container flex mx-auto h-[100svh]">
+        <SideBar />
+        <Outlet />
+      </div>
+    </>
+  );
 }
 
-export default AccountLayout
-
-
+export default AccountLayout;

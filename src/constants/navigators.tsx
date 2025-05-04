@@ -1,40 +1,43 @@
 import { MdChatBubbleOutline } from "react-icons/md";
 import { BiCartAlt } from "react-icons/bi";
-import { CiViewList } from "react-icons/ci";
 import { ReactNode } from "react";
 import { TbTag } from "react-icons/tb";
+import { MdOutlineAddLocationAlt } from "react-icons/md";
 export interface ISubNavigator {
-    title:string
-    link:string
-    segment:string
-} 
-export interface IMainNavigators {
-  title: string
-  icon: ReactNode
-  link: string
-  segment:string
-  subNavigators?:ISubNavigator[]
+  title: string;
+  link: string;
+  segment: string;
 }
-export const mainNavigators:IMainNavigators[] = [
+export interface IMainNavigators {
+  title: string;
+  icon: ReactNode;
+  link: string;
+  segment: string;
+  subNavigators?: ISubNavigator[];
+}
+export const mainNavigators: IMainNavigators[] = [
   {
-    title:"orders",
-    segment:"orders",
-    icon:<BiCartAlt />,
-    link:"/home/account/orders",
-  },{
-    title:"wishList",
-    segment:"wishlist",
-    icon:<TbTag />,
-    link:"/home/account/wishList",
-  },{
-    title:"addresses",
-    segment:"addresses",
-    icon:<CiViewList />,
-    link:"/home/account/addresses",
-  },{
-    title:"Chats",
-    segment:"sellerschats",
-    icon:<MdChatBubbleOutline />,
-    link:"/home/account/sellersChats"
-  }
-]
+    title: "orders",
+    segment: "orders",
+    icon: <BiCartAlt />,
+    link: "/account/orders",
+  },
+  {
+    title: "wishList",
+    segment: "wishlist",
+    icon: <TbTag />,
+    link: "/account/wishList",
+  },
+  {
+    title: "addresses",
+    segment: "addresses",
+    icon: <MdOutlineAddLocationAlt />,
+    link: "/account/addresses",
+  },
+  {
+    title: "Chats",
+    segment: "chats",
+    icon: <MdChatBubbleOutline />,
+    link: "/account/chats",
+  },
+];

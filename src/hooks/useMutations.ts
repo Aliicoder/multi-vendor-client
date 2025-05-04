@@ -1,58 +1,92 @@
+import { errorToast, successToast } from "@/lib/utils";
 import { selectCurrentUser } from "@/store/Reducers/authReducer";
-import { useAddProductAndFetchMutation, useDeleteProductAndFetchMutation } from "@/store/apiSlices/cartSlice";
 import { setActiveCart } from "@/store/Reducers/cartReducer";
-import { useDeleteFromWishListMutation, useAddToWishListMutation } from "@/store/apiSlices/wishListSlice";
-import toast from "react-hot-toast";
+import {
+  useAddToCartMutation,
+  useDeleteFromCartMutation,
+} from "@/store/apiSlices/cartSlice";
+import {
+  useDeleteFromWishListMutation,
+  useAddToWishListMutation,
+} from "@/store/apiSlices/wishListSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const usePrivateMutations = () => {
-  const { accessToken } = useSelector(selectCurrentUser)
-  const dispatch = useDispatch()
-  const [addProductAndFetchMutation,{isLoading:isAdded}] = useAddProductAndFetchMutation()
-  const [addProductToWishListMutation] = useAddToWishListMutation();
-  const [deleteAndFetchMutation,{isLoading:isDeleted}] = useDeleteProductAndFetchMutation()
-  const [deleteFromWhishListMutation] = useDeleteFromWishListMutation()
-  const addToCart = async (productId:string) =>{
-    if(accessToken){
-      try{
-        const response = await addProductAndFetchMutation({productId}).unwrap()
-        dispatch(setActiveCart(response.cart))
-        toast.success(response.message)
-      }catch(error){}
-    }
-  }
-  const addToWishList = async (productId:string) =>{
-    if(accessToken){
-      try{
-        const response = await addProductToWishListMutation({productId}).unwrap()
-        toast.success(response.message)
-      }catch(error){}
-    }
-  }
-  const deleteFromWhishList = async (productId:string) =>{
-    if(accessToken){
-      try{
-        const response = await deleteFromWhishListMutation({productId}).unwrap()
-        toast.success(response.message)
-      }catch(error){}
-    }
-  }
-  const deleteFromCart = async (productId:string) =>{
-    if(accessToken){
-      try{
-        const response = await deleteAndFetchMutation({productId}).unwrap()
+  const { accessToken } = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+
+  const [addToCartMutation, { isLoading: isAddedToCart }] =
+    useAddToCartMutation();
+
+  const [deleteFromCartMutation, { isLoading: isDeletedFromCart }] =
+    useDeleteFromCartMutation();
+
+  const [addProductToWishListMutation, { isLoading: isAddedToWishList }] =
+    useAddToWishListMutation();
+  const [deleteFromWhishListMutation, { isLoading: isDeletedFromWishList }] =
+    useDeleteFromWishListMutation();
+
+  const addToCart = async (productId: string) => {
+    if (accessToken) {
+      try {
+        const response = await addToCartMutation({
+          productId,
+        }).unwrap();
         dispatch(setActiveCart(response.cart));
-      }catch(error){}
+        successToast(response);
+      } catch (error) {
+        errorToast(error);
+      }
     }
-  }
+  };
+  const deleteFromCart = async (productId: string) => {
+    if (accessToken) {
+      try {
+        const response = await deleteFromCartMutation({ productId }).unwrap();
+        dispatch(setActiveCart(response.cart));
+        successToast(response);
+      } catch (error) {
+        errorToast(error);
+      }
+    }
+  };
+  const addToWishList = async (productId: string) => {
+    if (accessToken) {
+      try {
+        const response = await addProductToWishListMutation({
+          productId,
+        }).unwrap();
+        console.log("added from wishlist ", response);
+        successToast(response);
+      } catch (error) {
+        errorToast(error);
+      }
+    }
+  };
+  const deleteFromWhishList = async (productId: string) => {
+    if (accessToken) {
+      try {
+        const response = await deleteFromWhishListMutation({
+          productId,
+        }).unwrap();
+        console.log("deleted from wishlist ", response);
+        successToast(response);
+      } catch (error) {
+        errorToast(error);
+      }
+    }
+  };
+
   return {
     addToCart,
+    deleteFromCart,
     addToWishList,
     deleteFromWhishList,
-    deleteFromCart,
-    isAdded,
-    isDeleted,
-  }
-}
+    isAddedToCart,
+    isDeletedFromCart,
+    isAddedToWishList,
+    isDeletedFromWishList,
+  };
+};
 
-export default  usePrivateMutations 
+export default usePrivateMutations;

@@ -1,29 +1,49 @@
-import { ICounter } from "@/utils/types/types"
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa"
+import { ICounter } from "@/types/types";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
-interface PaginationParams{
-  onLeftClick:()=>void
-  onRightClick:()=>void
-  counter:ICounter
+interface PaginationParams {
+  onLeftClick: () => void;
+  onRightClick: () => void;
+  counter: ICounter;
 }
-function Pagination({counter,onLeftClick,onRightClick}:PaginationParams) {
+function Pagination({ counter, onLeftClick, onRightClick }: PaginationParams) {
   return (
-    <div className="flex c3 mt-3 justify-end pr-10  gap-3 p-3">
-      <div className="flex items-center gap-3">
-          <div className="cursor-pointer flex items-center gap-1" onClick={onLeftClick}>
-            <FaAngleLeft /> <div className="pb-1 font-semibold hover:underline">Previous</div>
+    <>
+      {counter.pagesLen > 1 && (
+        <div className="flex justify-end p-3 c3 gap-3 mt-3 pr-10">
+          <div className="flex gap-3 items-center">
+            <div
+              className="flex cursor-pointer gap-1 items-center"
+              onClick={onLeftClick}
+            >
+              <FaAngleLeft />{" "}
+              <div className="font-semibold hover:underline pb-1">Previous</div>
+            </div>
+            <ul className="flex gap-3">
+              {counter.curPage <= 1 ? (
+                <li></li>
+              ) : (
+                <li className="scale-75 transition-all">{counter.prev}</li>
+              )}
+              <li className="font-semibold">{counter.curPage}</li>
+              {counter.curPage >= counter.pagesLen ? (
+                <li></li>
+              ) : (
+                <li className="scale-75 transition-all">{counter.next}</li>
+              )}
+            </ul>
+            <div
+              className="flex cursor-pointer gap-1 items-center"
+              onClick={onRightClick}
+            >
+              <div className="font-semibold hover:underline pb-1">Next</div>
+              <FaAngleRight />
+            </div>
           </div>
-          <ul className="flex gap-3">
-            {counter.curPage <= 1 ?<li></li>:<li className="scale-75 transition-all">{counter.prev}</li>}
-            <li className="font-semibold">{counter.curPage}</li>
-            {counter.curPage >= counter.pagesLen?<li></li>:<li className="scale-75 transition-all">{counter.next}</li> }
-          </ul>
-          <div className="cursor-pointer flex items-center gap-1" onClick={onRightClick}>
-            <div className="pb-1 font-semibold hover:underline">Next</div><FaAngleRight />
-          </div>
-      </div>
-    </div>
-  )
+        </div>
+      )}
+    </>
+  );
 }
 
-export default Pagination
+export default Pagination;

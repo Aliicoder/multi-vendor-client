@@ -1,121 +1,196 @@
-import IconButton from "@/components/buttons/IconButton"
-import { Form, FormControl, FormField, FormItem,  FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { useLocation, useParams } from "react-router-dom"
-import { z } from "zod"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
+import { z } from "zod";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { useAddMessageMutation, useFetchChatMessagesQuery } from "@/store/apiSlices/chatSlice"
-import { useSelector } from "react-redux"
-import { selectCurrentUser } from "@/store/Reducers/authReducer"
-import { IMessage } from "@/utils/types/types"
-import { useEffect, useState } from "react"
-import { socket } from "@/lib/socket"
+import {
+  useAddMessageMutation,
+  useGetChatMessagesQuery,
+} from "@/store/apiSlices/chatSlice";
+import { IChat, IMessage, IParticipant } from "@/types/types";
+import { useEffect, useRef, useState } from "react";
+import { socket } from "@/lib/socket";
+import { selectCurrentUser } from "@/store/Reducers/authReducer";
+import { useSelector } from "react-redux";
+import { cn, errorToast, getInitials } from "@/lib/utils";
+import CustomButton from "@/components/buttons/CustomButton";
+import dateFormatter from "@/utils/functions/dateFormatter";
 const formSchema = z.object({
   message: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-})
+});
 function SellerChatPage() {
-  const { userId } = useSelector(selectCurrentUser) ; console.log("userId >>",userId)
-  const { chat } = useLocation().state ; console.log("chat >>",chat)
-  const [liveMessages,setLiveMessages] = useState<IMessage[]>([])
-  const { chatId }  = useParams(); //console.log("chat id ",chatId)
-  const { data:response } = useFetchChatMessagesQuery({chatId}); //console.log("messages response",response)
-  const [addMessageMutation] = useAddMessageMutation()
+  const chat = useLocation().state.chat as IChat;
+  const navigate = useNavigate();
+  const user = useSelector(selectCurrentUser);
+  const { data: response, isSuccess } = useGetChatMessagesQuery(
+    {
+      chatId: chat._id,
+    },
+    {
+      skip: Boolean(chat._id) == false,
+    }
+  );
+  const [addMessageMutation] = useAddMessageMutation();
+
+  const [liveMessages, setLiveMessages] = useState<IMessage[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [participant, setParticipant] = useState<IParticipant | null>(null);
+
+  const chatRef = useRef<HTMLDivElement>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       message: "",
     },
-  })
-  useEffect(()=>{
-    if(liveMessages && liveMessages.length > 0)
-    socket.emit("client>>SendMessage>>seller",liveMessages[liveMessages.length - 1]);
-    return () =>{
-      socket.off("client>>SendMessage>>seller")
-    }
-  },[liveMessages])
-  useEffect(()=>{
-    const receiveMessage = (message:any)=>{
-      setLiveMessages((prev:any)=>[...prev,message])
-    }
-    socket.on("client<<ReceiveMessage<<seller",receiveMessage)
-    return () =>{
-      socket.off("client<<ReceiveMessage<<seller",receiveMessage)
-    }
-  },[])
+  });
+  useEffect(() => {
+    if (liveMessages && liveMessages.length > 0)
+      socket.emit(
+        "user>>SendMessage>>participant",
+        liveMessages[liveMessages.length - 1]
+      );
+    return () => {
+      socket.off("user>>SendMessage>>participant");
+    };
+  }, [liveMessages]);
+  useEffect(() => {
+    const receiveMessage = (message: any) => {
+      setLiveMessages((prev: any) => [...prev, message]);
+    };
+    socket.on("participant<<ReceiveMessage<<user", receiveMessage);
+    return () => {
+      socket.off("participant<<ReceiveMessage<<user", receiveMessage);
+    };
+  }, []);
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try{
-      let message =  {
-        chatId,
-        message:values.message,
-        receiverId:chat.seller._id,
-        senderId:userId
-      }
-      await addMessageMutation(message).unwrap(); console.log("add message response",response)
-      setLiveMessages((prev:any)=>[...prev,message])
-    }catch(error){ console.log("add message error",error) 
+    try {
+      const recentMessage = {
+        chatId: chat._id,
+        message: values?.message,
+        senderId: user.userId,
+        receiverId: participant?.userId,
+        createdAt: Date.now(),
+      };
+      await addMessageMutation(recentMessage).unwrap();
+      setLiveMessages((prev: any) => [...prev, recentMessage]);
+    } catch (error) {
+      errorToast(error);
     }
   }
+  useEffect(() => {
+    if (chat) {
+      const participant = chat.participants.filter(
+        (participant) => participant.userId._id != user.userId
+      )[0];
+      setParticipant(participant);
+    }
+  }, [chat]);
+  useEffect(() => {
+    if (isSuccess && response?.messages && response?.messages.length > 0) {
+      setMessages(response?.messages);
+      console.log("messages ", response?.messages);
+    }
+  }, [messages]);
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [response?.messages, liveMessages]);
   return (
-  <div className='flex  flex-col justify-end  basis-9/12  p-[6%] pt-0 '>
+    <div className="flex size-full flex-col justify-end">
+      <div key={chat._id} className="flex items-center gap-5 b p-5 ">
+        <div className=" flex justify-end">
+          <div
+            id="avatar"
+            onClick={() => navigate("/account/orders")}
+            className={cn(`size-10 flex shrink-0 justify-center  items-center rounded-full font-semibold ring-1 ring-offset-2
+                  bg-blue-500 text-white`)}
+          >
+            {participant && getInitials(participant.userId.name)}
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <h1 className=" text-fs-16s font-bold">
+            {participant && participant.userId.name}
+          </h1>
+          <h1 className=" text-fs-13 font-semibold">start chat</h1>
+        </div>
+      </div>
+      <div className="h-full overflow-hidden">
+        <div
+          id="chat"
+          ref={chatRef}
+          className="flex flex-col h-full overflow-y-auto bg-blue-50"
+        >
+          {[...(response?.messages || []), ...(liveMessages || [])].map(
+            (message: IMessage) => (
+              <div
+                key={message._id}
+                className={cn(
+                  "flex first-of-type:mt-auto",
+                  message?.senderId === user.userId && "flex-row-reverse"
+                )}
+              >
+                <div className="flex flex-col p-2 m-3 rounded-md bg-white w-fit max-w-[50%]">
+                  <h1 className="text-fs-16">{message?.message}</h1>
+                  <p
+                    className={cn(
+                      "uppercase text-fs-10 mt-2",
+                      message?.senderId === user.userId && "text-end"
+                    )}
+                  >
+                    {dateFormatter(message?.createdAt, "time")}
+                  </p>
+                </div>
+              </div>
+            )
+          )}
+        </div>
+      </div>
+      <div className="">
+        <Form {...form}>
+          <form
+            id="message-input"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex  gap-[3%] m-5"
+          >
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem className="grow">
+                  <FormControl>
+                    <Input
+                      className="bg-white"
+                      placeholder="Type here ..."
+                      {...field}
+                    />
+                  </FormControl>
 
-    <div id="chat" className='flex flex-col pb-[3%] '>
-     <>
-        {
-          response?.messages && response?.messages?.length > 0 &&
-          response?.messages.map((messageInfo:IMessage)=>
-            (
-              <div key={messageInfo._id} className={`flex ${messageInfo?.senderId == userId ? "flex-row-reverse" : "" } `}>
-                <div className={`  
-                  p-[1%] m-3 rounded-md bg-slate-100 w-fit max-w-[50%]  text-wrap   `}>
-                     {messageInfo?.message}
-                </div>
-              </div>
-            ))
-        }
-     </>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <CustomButton theme="blue" type="submit">
+              <RiSendPlaneFill />
+            </CustomButton>
+          </form>
+        </Form>
+      </div>
     </div>
-    <>
-        {
-          liveMessages && liveMessages.map((messageInfo:IMessage)=>
-            (
-              <div key={messageInfo._id} className={`flex ${messageInfo?.senderId == userId ? "flex-row-reverse" : "" } `}>
-                <div className={`  
-                   m-3 rounded-md bg-slate-100 w-fit max-w-[50%]  `}>
-                    {messageInfo?.message}
-                </div>
-              </div>
-            ))
-        }
-    </>
-    <div className="">
-      <Form {...form}>
-        <form id="message-input"  onSubmit={form.handleSubmit(onSubmit)} className="flex  gap-[3%]">
-          <FormField
-            control={form.control}
-            name="message"
-            render={({ field }) => (
-              <FormItem className="grow">
-                <FormControl>
-                  <Input className="bg-white" placeholder="Type here ..." {...field} />
-                </FormControl>
-              
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-  
-          <IconButton className="!h-full" text=" Send" type="submit" direction={"right"}>
-            <RiSendPlaneFill />
-          </IconButton>
-        </form>
-      </Form>
-    </div>
-  </div>
-  )
+  );
 }
 
-export default SellerChatPage
+export default SellerChatPage;

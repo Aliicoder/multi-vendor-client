@@ -1,15 +1,11 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom";
 
-function MainLayout() { 
-
+function MainLayout() {
   return (
-    <div className="relative transition-all bg-[var(--main-color)] text-[--text-color] bg-slate-50 ">
-   
-
+    <div className="bg-[#eff6ff80]">
       <Outlet />
-  
     </div>
-  )
+  );
 }
 
-export default MainLayout
+export default MainLayout;

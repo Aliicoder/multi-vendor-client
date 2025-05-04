@@ -1,0 +1,20 @@
+import { z } from "zod"
+
+export default z.object({
+  name: z.string().min(2, {
+    message: "name is too short",
+  }),
+  email: z.string().email().min(2, {
+    message: "invalid email",
+  }),
+  password: z.string().min(8, {
+    message: "password is too short",
+  }),
+  requestedRole: z.string().default("client"),
+  terms: z
+    .boolean()
+    .default(false)
+    .refine((val) => val === true, {
+      message: "You must agree to the terms and conditions",
+    }),
+})

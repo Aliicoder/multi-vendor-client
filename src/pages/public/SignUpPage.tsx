@@ -1,20 +1,20 @@
-import { lazy, Suspense } from "react"
-const SignUpForm = lazy(()=>import("@/components/forms/SignUpForm"))
-function SignUpPage() {
+import SignupForm from "@/components/forms/SignupForm";
+
+function SignupPage() {
   return (
-  <>
-    <div className="relative flex ">
-      <Suspense fallback={null}>
-        <SignUpForm />
-      </Suspense>
-      <div className="w-full | hidden justify-center items-center 
-        md:flex md:w-1/2">
-        <img src="/svgs/signup.svg" className=" w-1/2" alt="" />
+    <div className="flex">
+      <SignupForm
+        className="flex justify-center items-center | w-full h-lvh bg-slate-50 
+      md:w-1/2"
+      />
+      <div
+        className="flex w-full justify-center items-center 
+      max-md:hidden md:w-1/2"
+      >
+        <img src="/svgs/signup.svg" className="w-1/2" />
       </div>
     </div>
-  </>
-  )
+  );
 }
 
-export default SignUpPage
-
+export default SignupPage;

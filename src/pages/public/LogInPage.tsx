@@ -1,17 +1,17 @@
-import { lazy, Suspense } from "react"
-const LogInForm = lazy(()=>import("@/components/forms/LogInForm"))
+import LogInForm from "@/components/forms/LogInForm";
+
 function LogInPage() {
   return (
-    <div className="relative flex ">
-      <div className="hidden justify-center items-center 
-        md:flex md:w-1/2">
-        <img src="/svgs/login.svg" className=" w-1/2" alt="" />
+    <div className="flex">
+      <div
+        className="flex justify-center items-center 
+        md:w-1/2 max-md:hidden"
+      >
+        <img src="/svgs/login.svg" className="w-1/2" />
       </div>
-      <Suspense fallback={null}>
-        <LogInForm />
-      </Suspense>
+      <LogInForm />
     </div>
-  )
+  );
 }
 
-export default LogInPage
+export default LogInPage;

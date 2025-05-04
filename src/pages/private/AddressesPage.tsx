@@ -1,77 +1,111 @@
-import CustomButton from "@/components/buttons/CustomButton"
-import AddAddressPortal from "@/components/portals/AddAddressPortal"
-import EditAddressPortal from "@/components/portals/EditAddressPortal"
-import { useDeleteAddressMutation } from "@/store/apiSlices/clientSlice"
-import { selectCurrentUser, setAddresses } from "@/store/Reducers/authReducer"
-import tryCatch from "@/utils/functions/tryCatch"
-import { IAddress } from "@/utils/types/types"
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { IoIosArrowBack } from "react-icons/io";
-import { useNavigate } from "react-router-dom"
+import CustomButton from "@/components/buttons/CustomButton";
+import AddAddressPortal from "@/components/portals/AddAddressPortal";
+import {
+  useDeleteAddressMutation,
+  useSetAddressAsDefaultMutation,
+} from "@/store/apiSlices/userSlice";
+import { selectCurrentUser, setAddresses } from "@/store/Reducers/authReducer";
+import { IAddress } from "@/types/types";
+import { useDispatch, useSelector } from "react-redux";
+import Address from "@/components/shared/Address";
+import { errorToast } from "@/lib/utils";
+import { useState } from "react";
+import UpdateAddressPortal from "@/components/portals/UpdateAddressPortal";
 function AddressesPage() {
-  const [addAddress,setAddAddress] = useState(false)
-  const navigate = useNavigate()
-  const  { addresses }  = useSelector(selectCurrentUser) 
-  const [ editAddress,setEditAddress] = useState<IAddress|undefined>()
-  const dispatch = useDispatch()
-  const [deleteAddressMutation] = useDeleteAddressMutation()
-  let handleDeleteAddress = async (addressId:string) => {
-    await tryCatch( async ()=>{
-      if(addressId){
-        let response = await deleteAddressMutation({addressId}).unwrap()
-        dispatch(setAddresses(response.addresses))
-      } 
-    })
-  }
+  const { userId, addresses } = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+  const [deleteAddressMutation] = useDeleteAddressMutation();
+  const [setAsDefault] = useSetAddressAsDefaultMutation();
+
+  const [addAddress, setAddAddress] = useState(false);
+  const [editAddress, setEditAddress] = useState<IAddress | undefined>();
+
+  let handleDeleteAddress = async (addressId: string) => {
+    try {
+      let response = await deleteAddressMutation({
+        userId,
+        addressId,
+      }).unwrap();
+      dispatch(setAddresses(response.addresses));
+    } catch (error: any) {
+      errorToast(error.data.message ?? "something went wrong");
+    }
+  };
+  let handleSetAsDefault = async (addressId: string) => {
+    try {
+      let response = await setAsDefault({ userId, addressId }).unwrap();
+      dispatch(setAddresses(response.addresses));
+    } catch (error: any) {
+      errorToast(error.data.message ?? "something went wrong");
+    }
+  };
+  const openInGoogleMaps = (lat: number, lon: number) => {
+    const url = `https://www.google.com/maps?q=${lat},${lon}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <>
       <AddAddressPortal addAddress={addAddress} setAddAddress={setAddAddress} />
-      <EditAddressPortal editAddress={editAddress} setEditAddress={setEditAddress} />
+      <UpdateAddressPortal
+        editAddress={editAddress}
+        setEditAddress={setEditAddress}
+      />
 
-      <div className="p-6 w-full  | flex flex-col overflow-y-scroll hide-scrollbar montserrat">
+      <div className="flex p-5 gap-5 flex-col w-full hide-scrollbar">
+        <div className="p-5 pb-0 w-full  gap-3">
+          <h1 className="text-blue-500 font-semibold"> Addresses</h1>
 
-        <CustomButton onClick={()=>navigate(-1)}
-          className="c8 p-6 gap-3 |  flex items-center | bg-white rounded-xl 
-          md:hidden" 
-          direction="left" text="mange addresses">
-          <IoIosArrowBack />
-        </CustomButton>
-
-        <h1 className="font-bold text-blue-600">
-          My addresses
-        </h1>
-        <div className="text-gray-950 mb-3" onClick={()=> setAddAddress(true)}>
-          + Add new address
+          <CustomButton
+            className="text-fs-13 hover:underline"
+            onClick={() => setAddAddress(true)}
+          >
+            new address +
+          </CustomButton>
         </div>
-        <div className="grow | bg-white rounded-xl">
-        {
-          addresses.length > 0 &&
-          addresses.map((address:IAddress)=>
-          <div className="gap-1 | flex flex-col border-b border-slate-200">
-            <div className="flex items-center">
-              <div className="p-2 mr-2 bg-blue-500 border rounded-md font-bold text-white">{address.type}</div> 
-              <p>{address.city},</p> <p>{address.area},</p> <p>{address.pinCode}</p>
+
+        {addresses.length > 0 &&
+          addresses.map((address: IAddress) => (
+            <div className="flex flex-col  border bg-white border-slate-100 rounded-lg ">
+              <div className="flex justify-between fs-16 gap-3  p-6 items-center  ">
+                <Address address={address} bg />
+              </div>
+
+              <div className="flex justify-between p-3 ">
+                <div className="flex gap-3 items-center text-fs-13 text-slate-500 ml-5">
+                  <div>phone : {address.phone}</div>
+
+                  <CustomButton
+                    onClick={() => openInGoogleMaps(address.lat, address.lng)}
+                    theme="none"
+                    className=" h-9 flex justify-content-center items-center text-blue-500"
+                  >
+                    view location
+                  </CustomButton>
+                </div>
+                <div className="flex gap-3">
+                  <CustomButton
+                    theme="white"
+                    className=" h-9 flex justify-content-center items-center"
+                    onClick={() => setEditAddress(address)}
+                  >
+                    edit
+                  </CustomButton>
+
+                  <CustomButton
+                    onClick={() => handleDeleteAddress(address._id)}
+                    theme="black"
+                    className=" h-9 flex justify-content-center items-center"
+                  >
+                    delete
+                  </CustomButton>
+                </div>
+              </div>
             </div>
-            <div className=" gap-3 | flex justify-end">
-              <CustomButton onClick={()=>setEditAddress(address)}
-                className="c5 px-3 py-2 gap-3 | flex items-center | font-medium border rounded-lg  text-blue-500
-                  md:c3" 
-                text="edit">
-              </CustomButton>
-              <CustomButton onClick={()=>handleDeleteAddress(address._id)}
-                className="c5 px-3 py-2 gap-3 | flex items-center | font-medium border rounded-lg  text-red-600
-                  md:c3" 
-                text="delete">
-              </CustomButton>
-            </div>
-          </div> 
-          )
-        }
-        </div>
+          ))}
       </div>
     </>
-  )
+  );
 }
 
-export default AddressesPage
+export default AddressesPage;

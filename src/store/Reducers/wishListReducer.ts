@@ -1,23 +1,23 @@
-import { RootState } from '@/store/index'
-import { IProduct } from '@/utils/types/types'
-import { createSlice } from '@reduxjs/toolkit'
+import { RootState } from "@/store/index";
+import { IProduct } from "@/types/types";
+import { createSlice } from "@reduxjs/toolkit";
 interface InitialState {
-  products: IProduct[]
+  products: IProduct[];
 }
-const initialState:InitialState = {
+const initialState: InitialState = {
   products: [],
-}
+};
 export const wishListReducer = createSlice({
-  name: 'wishlist',
+  name: "wishlist",
   initialState,
-  reducers:{
-    setWishList:(_,action) => {
-      const  wishList  = action.payload ; //console.log("wishList >>",action.payload)
-      return wishList
+  reducers: {
+    setWishList: (_, action) => {
+      const wishList = action.payload;
+      return wishList;
     },
   },
-})
-export const { setWishList } = wishListReducer.actions
-export default wishListReducer.reducer 
+});
+export const { setWishList } = wishListReducer.actions;
+export default wishListReducer.reducer;
 
-export const selectWishList = (state:RootState) => state.wishlist
+export const selectWishList = (state: RootState) => state.wishlist;

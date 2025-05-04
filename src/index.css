@@ -4,6 +4,51 @@
 @tailwind components;
 @tailwind utilities;
 @layer base {
+  #check-out-left-part {
+    max-height: calc(100vh - var(--header-height)); /* Set max height */
+    overflow-y: auto;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  }
+  #cart-left-part {
+    max-height: calc(100vh - var(--header-height)); /* Set max height */
+    overflow-y: auto;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  }
+  /* Webkit Scrollbar */
+  #check-out-left-part::-webkit-scrollbar {
+    width: 5px; /* Thin scrollbar */
+  }
+
+  /* Scrollbar Track */
+  #check-out-left-part::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px 0; /* Adds space above/below */
+  }
+
+  /* Scrollbar Thumb (Draggable part) */
+  #check-out-left-part::-webkit-scrollbar-thumb {
+    @apply text-blue-500;
+    border-radius: 10px;
+    min-height: 50px; /* Forces a minimum scrollbar height */
+  }
+  #cart-left-part::-webkit-scrollbar {
+    width: 5px; /* Thin scrollbar */
+  }
+
+  /* Scrollbar Track */
+  #cart-left-part::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px 0; /* Adds space above/below */
+  }
+
+  /* Scrollbar Thumb (Draggable part) */
+  #cart-left-part::-webkit-scrollbar-thumb {
+    @apply text-blue-500;
+    border-radius: 10px;
+    min-height: 50px; /* Forces a minimum scrollbar height */
+  }
   .titillium {
     font-family: "Titillium Web", sans-serif;
     font-style: normal;
@@ -23,8 +68,7 @@
     --border-color: #e5e7eb;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
-    --header-height :0;
- 
+    --header-height: 0;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -102,6 +146,36 @@
   .c9 {
     font-size: clamp(0.25rem, 0.25rem + 3.8vw, 3.8125rem);
   }
+  .fs--61 {
+    font-size: clamp(3.0625rem, 2.8653rem + 0.986vw, 3.8125rem);
+  }
+  .fs-49 {
+    font-size: clamp(2.4375rem, 2.2732rem + 0.8217vw, 3.0625rem);
+  }
+  .fs-39 {
+    font-size: clamp(1.9375rem, 1.806rem + 0.6574vw, 2.4375rem);
+  }
+  .fs-31 {
+    font-size: clamp(1.5625rem, 1.4639rem + 0.493vw, 1.9375rem);
+  }
+  .fs-25 {
+    font-size: clamp(1.25rem, 1.1678rem + 0.4108vw, 1.5625rem);
+  }
+  .fs-20 {
+    font-size: clamp(1rem, 0.9343rem + 0.3287vw, 1.25rem);
+  }
+  .fs-16 {
+    font-size: clamp(0.8125rem, 0.7632rem + 0.2465vw, 1rem);
+  }
+  .fs-13 {
+    font-size: clamp(0.625rem, 0.5757rem + 0.2465vw, 0.8125rem);
+  }
+  .fs-10 {
+    font-size: clamp(0.5rem, 0.4671rem + 0.1643vw, 0.625rem);
+  }
+  .fs-8 {
+    font-size: clamp(0.4375rem, 0.4211rem + 0.0822vw, 0.5rem);
+  }
   ::-webkit-scrollbar {
     width: 0.5em; /* Adjusts the width of the scrollbar */
     height: 0.5em; /* Adjusts the height of the scrollbar */
@@ -131,6 +205,16 @@
   }
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+  .embla {
+    overflow: hidden;
+  }
+  .embla__container {
+    display: flex;
+  }
+  .embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
   }
 }
 @layer base {

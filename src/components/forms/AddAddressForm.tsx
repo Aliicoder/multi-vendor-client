@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -6,149 +5,136 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { useAddAddressMutation } from "@/store/apiSlices/clientSlice"
-import addressValidation from "@/utils/validations/addressValidation"
-import tryCatch from "@/utils/functions/tryCatch"
-import { useDispatch } from "react-redux"
-import { setAddresses } from "@/store/Reducers/authReducer"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useAddAddressMutation } from "@/store/apiSlices/userSlice";
+import addressValidation from "@/validations/addressValidation";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser, setAddresses } from "@/store/Reducers/authReducer";
+import CustomButton from "../buttons/CustomButton";
+import { useEffect, useRef, useState } from "react";
+import { trackElementHeight } from "@/utils/functions/resizeTrackers";
+import GoogleMapLocationPicker from "../shared/GoogleMapLocationPicker";
+import { IoMdClose } from "react-icons/io";
+import { errorToast } from "@/lib/utils";
+function AddAddressForm({
+  setAddAddress,
+}: {
+  setAddAddress: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const user = useSelector(selectCurrentUser);
+  const [addAddressMutation] = useAddAddressMutation();
+  const dispatch = useDispatch();
+  const [location, setLocation] = useState<any>(null);
 
-function AddAddressForm() {
-  const [addAddressMutation] = useAddAddressMutation()
-  const dispatch = useDispatch()
-  const form = useForm<z.infer<typeof addressValidation>>({resolver: zodResolver(addressValidation)})
-  async function  onSubmit(values: z.infer<typeof addressValidation>) {
-    await tryCatch( async ()=> {
-      let response =  await addAddressMutation(values).unwrap()
-      dispatch(setAddresses(response.addresses))
-    })
+  const locationFromRef = useRef<HTMLDivElement>(null);
+
+  const form = useForm<z.infer<typeof addressValidation>>({
+    resolver: zodResolver(addressValidation),
+  });
+  const { errors } = form.formState;
+  async function onSubmit(values: z.infer<typeof addressValidation>) {
+    try {
+      let response = await addAddressMutation(values).unwrap();
+      dispatch(setAddresses(response.addresses));
+      setAddAddress(false);
+    } catch (error: any) {
+      errorToast(error.message);
+    }
   }
+  useEffect(() => {
+    form.setValue("userId", user.userId);
+    form.setValue("lat", location?.lat);
+    form.setValue("lng", location?.lng);
+  }, [location]);
+  useEffect(() => {
+    trackElementHeight(locationFromRef, "--locationFrom-height");
+  }, []);
   return (
     <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8  bg-white border ">
-      <div className="gap-3 | flex flex-wrap rounded-md ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex">
+        <GoogleMapLocationPicker
+          onLocationSelect={setLocation}
+          initialLocation={location}
+        />
 
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem className="basis-full relative max-h-16 
-              md:basis-1/2">
-              <FormLabel >Type</FormLabel>
-              <Select  onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl className="border">
-                  <SelectTrigger>
-                    <SelectValue className="border" placeholder="Location Type" />
-                  </SelectTrigger>
+        <div
+          ref={locationFromRef}
+          className="flex flex-col w-[650px] gap-5 p-5"
+        >
+          <div
+            onClick={() => setAddAddress(false)}
+            className="flex justify-end"
+          >
+            <IoMdClose />
+          </div>
+
+          <FormField
+            control={form.control}
+            name="province"
+            render={({ field }) => (
+              <FormItem className="md:basis-1/2">
+                <FormLabel>Province</FormLabel>
+                <FormControl>
+                  <Input {...field} />
                 </FormControl>
-                <SelectContent side="bottom" align="end" sideOffset={4}>
-                  <SelectItem value="home">Home</SelectItem>
-                  <SelectItem value="work">Work</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem className="basis-1/2">
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="street"
+            render={({ field }) => (
+              <FormItem className="basis-1/2">
+                <FormLabel>Street</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="basis-1/2">
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {errors.lat && (
+            <h1 className="text-red-500 text-sm">{errors.lat.message}</h1>
           )}
-        />
-
-        <FormField
-          control={form.control}
-          name="province"
-          render={({ field }) => (
-            <FormItem className=" basis-full
-              md:basis-1/2">
-              <FormLabel>Province</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-            
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-      </div>
-      <div className="flex flex-wrap gap-3">
-
-        <FormField
-          control={form.control}
-          name="city"
-          render={({ field }) => (
-            <FormItem className=" basis-full
-              md:basis-1/2">
-              <FormLabel>City</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-            
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="area"
-          render={({ field }) => (
-            <FormItem className="basis-1/2">
-              <FormLabel>Area</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-             
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-      </div>
-      <div className="flex gap-3">
-
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem className="basis-1/2">
-              <FormLabel>Phone</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-            
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="pinCode"
-          render={({ field }) => (
-            <FormItem className="basis-1/2">
-              <FormLabel>Pin Code</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-            
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-      </div>
-    
-      <div className="flex gap-3">
-        <Button type="submit">Save</Button>
-      </div>
-
-    </form>
-  </Form>
-  )
+          <CustomButton className="" theme="black">
+            Submit
+          </CustomButton>
+        </div>
+      </form>
+    </Form>
+  );
 }
 
-export default AddAddressForm
+export default AddAddressForm;

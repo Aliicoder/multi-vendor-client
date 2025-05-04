@@ -1,56 +1,66 @@
-import { FaUpRightFromSquare } from "react-icons/fa6"
-import LinkButton from "../buttons/LinkButton"
+import { FaUpRightFromSquare } from "react-icons/fa6";
+import CustomButton from "../buttons/CustomButton";
 
 function Footer() {
   return (
-  <div className='relative before:content-["*"] before:w-lvw before:border-t before:h-full before:left-0  before:absolute before:bg-white before:z-0'>
-      <div className='relative container mx-auto flex flex-col montserrat px-[100px] bg-white border-t shadow-sm b'>
-        <div className="z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          <div className=" flex flex-col gap-3 p-20">
-            <h1 className='c4 hidden md:block font-semibold'>
-              souq
-            </h1>
-            <p className="text-sm">
-              Makin Photography is a distinguished company celebrated for its 
-              unparalleled creativity and precision. 
-              Their team of expert photographers excels at weaving 
-              artistry and emotion into every frame, 
-              ensuring that each image is both vivid and evocative. 
-            </p>
-            <h2 className="c4 font-semibold">Email</h2>
-            <p>souq@gmail.com</p>
-          </div>
-          
-          <div className="p-20">
-              <h2 className="c4 font-semibold">EXPLORE</h2>
+    <section className="flex flex-col montserrat mt-10 border-t border-neutral-100">
+      <div className="flex flex-col bg-blue-500 text-white">
+        <div
+          className="flex flex-col container mx-auto relative 
+          md:px-6"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 ">
+            <div className="flex flex-col p-20 gap-3">
+              <h1 className="font-semibold fs-49">ons</h1>
+              <h1 className="fs-16 line-clamp-5">
+                the ultimate multi-vendor e-commerce app that brings endless
+                possibilities to your shopping experience! With Souq, you can
+                explore a vast marketplace featuring products from a diverse
+                range of trusted vendors, all in one place. Whether you’re
+                searching for fashion, electronics, home essentials, or unique
+                handmade items, Souq offers unbeatable variety, competitive
+                prices
+              </h1>
+              <h1 className="font-semibold fs-20">Email</h1>
+              <h1 className={""}>ons@gmail.com</h1>
+            </div>
+
+            <div
+              className="flex flex-col p-20 py-10
+              md:py-20"
+            >
+              <h1 className="font-semibold fs-20">EXPLORE</h1>
               <ul className="flex flex-col gap-5 my-5">
                 <li>About us</li>
                 <li>About our shop</li>
                 <li>Privacy and policy</li>
                 <li>Blogs</li>
               </ul>
-          </div>
-          <div className="flex flex-col gap-3 p-20">
-            <div className="flex flex-col gap-2">
-              <h2 className="c4 font-semibold">Become a Seller</h2>
-              <p>join our community</p>
-              <div className="flex">
-                <LinkButton className="cp-x-2_7 c3 text-nowrap cp-y-1_4 m-4 gap-2  font-semibold bg-transparent border  ring-offset-4 ring-1 hover:ring-0 transition-all" to={""} text="Sign up" direction={"right"}>
-                  <FaUpRightFromSquare  className="c2"/>
-                </LinkButton>
-              </div>
             </div>
-            <h2 className="c4 font-semibold ">Contact us</h2>
-            <p>+91 6366313872</p>
-            <p>+91 7166313872</p>
+            <div
+              className="flex flex-col gap-3 p-20 py-10
+              md:my-10"
+            >
+              <h1 className="font-semibold fs-20">Become a Seller</h1>
+              <h1 className="my-2">join our community</h1>
+              <div className="flex">
+                <CustomButton
+                  theme="white"
+                  className="flex fs-16 gap-2 items-center transition-all"
+                >
+                  Join us
+                  <FaUpRightFromSquare className="fs-10" />
+                </CustomButton>
+              </div>
+              <h1 className="font-semibold fs-20 mt-5">Contact us</h1>
+              <h1 className={""}>+91 6366313872</h1>
+              <h1 className={""}>+91 7166313872</h1>
+            </div>
           </div>
-        </div>
-        <div className="z-10 flex justify-center items-center">
-          <h1 className="c3 p-5 border-t">Copyrights 2024 All rights reserved </h1>
         </div>
       </div>
-  </div>
-  )
+    </section>
+  );
 }
 
-export default Footer
+export default Footer;

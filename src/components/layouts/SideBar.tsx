@@ -62,14 +62,14 @@ function Sidebar() {
 
         <h3 className=" font-medium ml-2">ons</h3>
       </button>
-      <div className="flex rounded-lg  drop-shadow-sm bg-white border border-neutral-100 ">
+      <div className="flex rounded-lg  drop-shadow-sm bg-white border border-neutral-100 mr-5 ">
         <button
           onClick={logoutMutation}
           className="px-3 flex montserrat items-center bg-blue-50 "
         >
           <TbLogout2 className="text-red-500" />
         </button>
-        <div className="  p-3 gap-5 flex items-center  ">
+        <div className="  p-3 gap-5 flex items-center mr-5  ">
           <div
             id="avatar"
             className="size-10 flex shrink-0 justify-center  items-center rounded-full font-semibold ring-1 ring-offset-2

@@ -46,7 +46,7 @@ function CheckOutPage() {
         currency: selectedCurrency.code,
         address: values.address,
       }).unwrap();
-      console.log("res ", response);
+      console.log("response ", response);
       setSuccess(true);
       dispatch(emptyTheCart());
       setTimeout(() => {
@@ -62,6 +62,9 @@ function CheckOutPage() {
   useEffect(() => {
     if (paymentMethod) form.setValue("paymentMethod", paymentMethod);
   }, [paymentMethod]);
+  useEffect(() => {
+    console.log("form errors ", form.formState.errors);
+  }, [form.formState.errors]);
   useEffect(() => {
     setTotalAmount(
       cart.totalAmount * exchangeRates[selectedCurrency.changeCode]

@@ -13,12 +13,12 @@ export const getInitials = (name: string) => {
     .toUpperCase();
 };
 
-export const errorToast = (error: any) => {
-  toast.error(error?.data?.message ?? "unknown error occurred");
+export const errorToast = (message: string) => {
+  toast.error(message ?? "unknown error occurred");
 };
 
-export const successToast = (response: any) => {
-  toast.success(response.message);
+export const successToast = (message: string) => {
+  toast.success(message);
 };
 export const placePlaceHolder = (value: string, placeholder: string) => {
   if (value) return;

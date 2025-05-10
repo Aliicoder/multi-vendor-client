@@ -9,6 +9,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     }),
     getPaginatedProductsQ: builder.query({
       query: ({
+        fun,
         perPage,
         curPage,
         sort,
@@ -16,26 +17,32 @@ export const productApiSlice = apiSlice.injectEndpoints({
         name,
         brand,
         shopName,
+        discount,
         outOfStock,
         category,
       }) => {
+        console.log("sort >>", sort);
+        console.log("function >>", fun);
         const queryString = [
-          _id && `_id=${_id}`,
-          name && `name=${name}`,
-          brand && `brand=${brand}`,
-          shopName && `shopName=${shopName}`,
-          outOfStock && `outOfStock=false`,
-          category && `category=${category}`,
-          curPage && `curPage=${curPage}`,
-          perPage && `perPage=${perPage}`,
-          sort && `sort=${sort}`,
+          _id ? `_id=${_id}` : ``,
+          name ? `name=${name}` : ``,
+          brand ? `brand=${brand}` : ``,
+          shopName ? `shopName=${shopName}` : ``,
+          outOfStock ? `outOfStock=false` : ``,
+          category ? `category=${category}` : ``,
+          curPage ? `curPage=${curPage}` : ``,
+          perPage ? `perPage=${perPage}` : ``,
+          sort ? `sort=${sort}` : ``,
+          discount && discount.gte ? `discount[gte]=${discount.gte}` : ``,
+          discount && (discount.lte || discount.lte === 0)
+            ? `discount[lte]=${discount.lte}`
+            : ``,
         ]
           .filter(Boolean)
           .join("&&");
-        console.log("products chunk 1 query string >>", queryString);
+        console.log("products query string >>", queryString);
         return `/products/paginated?${queryString}`;
       },
-      providesTags: ["Products"],
     }),
     getPaginatedProductsM: builder.mutation({
       query: ({
@@ -107,10 +114,15 @@ export const productApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getAiSearchedProducts: builder.mutation({
-      query: (credentials) => ({
+      query: ({ prompt, perPage, curPage, outOfStock }) => ({
         url: "/products/ai-search",
         method: "POST",
-        body: credentials,
+        body: {
+          prompt,
+          perPage,
+          curPage,
+          outOfStock,
+        },
       }),
     }),
   }),

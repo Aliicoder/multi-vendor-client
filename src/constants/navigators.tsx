@@ -1,4 +1,4 @@
-import { MdChatBubbleOutline } from "react-icons/md";
+import { PiChatsCircle } from "react-icons/pi";
 import { BiCartAlt } from "react-icons/bi";
 import { ReactNode } from "react";
 import { TbTag } from "react-icons/tb";
@@ -35,9 +35,9 @@ export const mainNavigators: IMainNavigators[] = [
     link: "/account/addresses",
   },
   {
-    title: "Chats",
-    segment: "chats",
-    icon: <MdChatBubbleOutline />,
-    link: "/account/chats",
+    title: "Merchants",
+    segment: "merchants",
+    icon: <PiChatsCircle />,
+    link: "/account/merchants",
   },
 ];

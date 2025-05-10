@@ -2,13 +2,18 @@ import { IProduct } from "@/types/types";
 import { useGetPaginatedProductsQQuery } from "@/store/apiSlices/productSlice";
 import ProductCard from "@/components/cards/ProductCard";
 import DraggableScroll from "@/components/scroll/DraggableScroll";
-function BestOffers() {
-  const { data: response } = useGetPaginatedProductsQQuery({});
+function NewArrivals() {
+  const { data: response } = useGetPaginatedProductsQQuery({
+    perPage: 8,
+    curPage: 1,
+    sort: ["-createdAt"],
+    outOfStock: false,
+  });
   return (
     <section className="py-5">
       <div id="deals" className="container flex flex-col montserrat mx-auto">
         <h1 id="deals-title" className="p-6 text-fs-20 font-semibold">
-          Deals for you
+          New Arrivals
         </h1>
         <DraggableScroll>
           {response?.products &&
@@ -22,4 +27,4 @@ function BestOffers() {
   );
 }
 
-export default BestOffers;
+export default NewArrivals;

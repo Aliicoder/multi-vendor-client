@@ -4,7 +4,15 @@ import { useGetPaginatedProductsQQuery } from "@/store/apiSlices/productSlice";
 import { IProduct } from "@/types/types";
 
 function Deals() {
-  const { data: response } = useGetPaginatedProductsQQuery({});
+  const { data: response } = useGetPaginatedProductsQQuery({
+    outOfStock: false,
+    discount: {
+      gte: 1,
+    },
+    sort: ["-createdAt"],
+    perPage: 8,
+    curPage: 1,
+  });
   return (
     <section className="py-5">
       <div id="deals" className="container flex flex-col montserrat mx-auto">

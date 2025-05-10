@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import addressValidation from "@/validations/addressValidation";
+import { addressValidation } from "@/validations/addressValidation";
 import { IAddress } from "@/types/types";
 import { useEffect, useRef, useState } from "react";
 import { useUpdateAddressMutation } from "@/store/apiSlices/userSlice";

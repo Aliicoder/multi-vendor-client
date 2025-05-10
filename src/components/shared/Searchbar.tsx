@@ -3,7 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import useSetTimeout from "@/hooks/useSetTimeout";
 import { useGetSearchedProductsQuery } from "@/store/apiSlices/productSlice";
 import { useNavigate } from "react-router-dom";
-import { IProduct } from "@/types/types";
+import { ICategory, IProduct } from "@/types/types";
 
 function Searchbar() {
   const navigate = useNavigate();
@@ -59,17 +59,20 @@ function Searchbar() {
                 {brand} brand
               </h1>
             ))}
-            {response.suggestions.categories.map((category: string) => (
+            {response.suggestions.categories.map((category: ICategory[]) => (
               <h1
-                key={category}
+                key={category[category.length - 1].name}
                 onClick={() =>
-                  navigate(`/categories/${category}`, {
-                    state: { category },
-                  })
+                  navigate(
+                    `/categories/${category[category.length - 1].name}`,
+                    {
+                      state: { category: category[category.length - 1].name },
+                    }
+                  )
                 }
                 className="flex bg-white m-1 p-2 rounded-lg cursor-pointer px-4"
               >
-                {category} category
+                {category[category.length - 1].name} category
               </h1>
             ))}
           </div>

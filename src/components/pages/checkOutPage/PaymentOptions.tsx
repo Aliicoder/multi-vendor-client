@@ -11,7 +11,11 @@ const PaymentOptions = ({
   paymentMethod,
   setPaymentMethod,
 }: PaymentOptionsProps) => {
-  const paymentMethods = [
+  const paymentMethods: {
+    id: IPaymentOptions;
+    label: string;
+    icon: JSX.Element;
+  }[] = [
     { id: "cod", label: "Cash on Delivery", icon: <FaMoneyBillWave /> },
     { id: "upi", label: "UPI Payment", icon: <FaQrcode /> },
     {

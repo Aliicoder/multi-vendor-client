@@ -22,11 +22,12 @@ export const authReducer = createSlice({
       const addresses = action.payload;
       state.addresses = addresses;
     },
-    logout: (_) => {
+    clearCredentials: (_) => {
       return initialState;
     },
   },
 });
-export const { setCredentials, logout, setAddresses } = authReducer.actions;
+export const { setCredentials, clearCredentials, setAddresses } =
+  authReducer.actions;
 export default authReducer.reducer;
 export const selectCurrentUser = (state: RootState) => state.auth;

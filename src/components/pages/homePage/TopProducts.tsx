@@ -7,6 +7,11 @@ import ProductCard from "@/components/cards/ProductCard";
 function TopProducts() {
   const { data: response } = useGetPaginatedProductsQQuery({
     outOfStock: false,
+    discount: {
+      lte: 0,
+    },
+    curPage: 1,
+    perPage: 8,
   });
   const navigate = useNavigate();
   return (

@@ -48,7 +48,7 @@ const LogInForm = () => {
   }
   return (
     <div
-      className=" w-full flex justify-center items-center h-lvh bg-slate-50  
+      className=" w-full flex justify-center items-center h-lvh bg-blue-500  
     md:w-1/2 "
     >
       <Form {...form}>

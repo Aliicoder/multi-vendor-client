@@ -4,7 +4,6 @@ import ShopProductsPage from "./pages/private/ShopProductsPage";
 import AddressesPage from "./pages/private/AddressesPage";
 import ProductsPage from "./pages/private/ProductsPages";
 import AISearchPage from "./pages/private/AISearchpage";
-import RootLayout from "./pages/layouts/RootLayout";
 import LogInPage from "./pages/public/LogInPage";
 import HomePage from "./pages/private/HomePage";
 import OrdersPage from "./pages/private/OrdersPage";
@@ -26,36 +25,34 @@ import CompletePayment from "./pages/private/CompletePayment";
 function App() {
   return (
     <Routes>
-      <Route element={<RootLayout />}>
-        <Route path="/login" element={<LogInPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route element={<PersistLoginMiddleware />}>
-          <Route element={<LoadRequirements />}>
-            <Route element={<ProtectedRoutesMiddleware />}>
-              <Route path="/" element={<MainLayout />}>
-                <Route path="complete-payment" element={<CompletePayment />} />
-                <Route path="cancel-payment" element={<CancelPayment />} />
-                <Route index element={<HomePage />} />
-                <Route path="products" element={<ProductsPage />} />
-                <Route path="ai-search" element={<AISearchPage />} />
-                <Route
-                  path="products/:productId"
-                  element={<ProductDetailsPage />}
-                />
-                <Route
-                  path="categories/:categoryId"
-                  element={<CategoryProductsPage />}
-                />
-                <Route path="shops/:shopName" element={<ShopProductsPage />} />
-                <Route path="cart" element={<CheckOutPage />} />
-                <Route path="account" element={<AccountLayout />}>
-                  <Route path="orders" element={<OrdersPage />} />
-                  <Route path="orders/:orderId" element={<TrackOrderPage />} />
-                  <Route path="wishList" element={<WishListPage />} />
-                  <Route path="addresses" element={<AddressesPage />} />
-                  <Route path="chats" element={<SellersChatsLayout />}>
-                    <Route path=":chatId" element={<SellerChatPage />} />
-                  </Route>
+      <Route path="/login" element={<LogInPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route element={<PersistLoginMiddleware />}>
+        <Route element={<LoadRequirements />}>
+          <Route element={<ProtectedRoutesMiddleware />}>
+            <Route path="/" element={<MainLayout />}>
+              <Route path="complete-payment" element={<CompletePayment />} />
+              <Route path="cancel-payment" element={<CancelPayment />} />
+              <Route index element={<HomePage />} />
+              <Route path="products" element={<ProductsPage />} />
+              <Route path="ai-search" element={<AISearchPage />} />
+              <Route
+                path="products/:productId"
+                element={<ProductDetailsPage />}
+              />
+              <Route
+                path="categories/:categoryId"
+                element={<CategoryProductsPage />}
+              />
+              <Route path="shops/:shopName" element={<ShopProductsPage />} />
+              <Route path="cart" element={<CheckOutPage />} />
+              <Route path="account" element={<AccountLayout />}>
+                <Route path="orders" element={<OrdersPage />} />
+                <Route path="orders/:orderId" element={<TrackOrderPage />} />
+                <Route path="wishList" element={<WishListPage />} />
+                <Route path="addresses" element={<AddressesPage />} />
+                <Route path="chats" element={<SellersChatsLayout />}>
+                  <Route path=":chatId" element={<SellerChatPage />} />
                 </Route>
               </Route>
             </Route>

@@ -33,9 +33,9 @@ const usePrivateMutations = () => {
           productId,
         }).unwrap();
         dispatch(setActiveCart(response.cart));
-        successToast(response);
-      } catch (error) {
-        errorToast(error);
+        successToast(response.message);
+      } catch (error: any) {
+        errorToast(error.data.message);
       }
     }
   };
@@ -44,9 +44,9 @@ const usePrivateMutations = () => {
       try {
         const response = await deleteFromCartMutation({ productId }).unwrap();
         dispatch(setActiveCart(response.cart));
-        successToast(response);
-      } catch (error) {
-        errorToast(error);
+        successToast(response.message);
+      } catch (error: any) {
+        errorToast(error.data.message);
       }
     }
   };
@@ -57,9 +57,9 @@ const usePrivateMutations = () => {
           productId,
         }).unwrap();
         console.log("added from wishlist ", response);
-        successToast(response);
-      } catch (error) {
-        errorToast(error);
+        successToast(response.message);
+      } catch (error: any) {
+        errorToast(error.data.message);
       }
     }
   };
@@ -70,9 +70,9 @@ const usePrivateMutations = () => {
           productId,
         }).unwrap();
         console.log("deleted from wishlist ", response);
-        successToast(response);
-      } catch (error) {
-        errorToast(error);
+        successToast(response.message);
+      } catch (error: any) {
+        errorToast(error.data.message);
       }
     }
   };

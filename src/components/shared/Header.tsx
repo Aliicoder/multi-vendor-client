@@ -10,7 +10,6 @@ import { cn, getInitials } from "@/lib/utils";
 import Address from "./Address";
 import { FaLocationArrow } from "react-icons/fa";
 import AddAddressPortal from "@/components/portals/AddAddressPortal";
-import { FaLocationDot } from "react-icons/fa6";
 import { CurrencySelector } from "./CurrencySelector";
 import LanguageSelector from "./LanguageSelector";
 import Searchbar from "./Searchbar";
@@ -21,10 +20,9 @@ function Header({ className }: INormalHeader) {
   const [addAddress, setAddAddress] = useState(false);
   const refHeader = useRef<HTMLDivElement>(null);
   const user = useSelector(selectCurrentUser);
-  console.log("user ", user);
   const navigate = useNavigate();
   useEffect(() => {
-    trackElementHeight(refHeader, "--header-height");
+    trackElementHeight(refHeader, "--header");
   }, []);
   return (
     <>
@@ -39,9 +37,9 @@ function Header({ className }: INormalHeader) {
         <div className="bg-blue-500 h-9 w-full mx-auto flex justify-between">
           <div className="container flex justify-between h-full  gap-3 items-center mx-auto">
             <div className="text-white">
-              {user.addresses[0] ? (
+              {user?.addresses?.length > 0 ? (
                 <div className="flex text-fs-13 gap-3 items-center">
-                  <FaLocationDot className="text-fs-10" />
+                  <FaLocationArrow className="text-fs-10" />
                   <Address address={user.addresses[0]} />
                 </div>
               ) : (

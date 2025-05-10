@@ -9,8 +9,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Header from "@/components/shared/Header";
-import useScreenSize from "@/hooks/useScreenSize";
-import useSegment from "@/hooks/useSegment";
 import { useGetAiSearchedProductsMutation } from "@/store/apiSlices/productSlice";
 import { FaArrowUp } from "react-icons/fa6";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +17,7 @@ import { useState } from "react";
 import CustomButton from "@/components/buttons/CustomButton";
 import ProductCard from "@/components/cards/ProductCard";
 import { errorToast, successToast } from "@/lib/utils";
+import Loader from "@/components/Loaders/Loader";
 const formSchema = z.object({
   prompt: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -26,8 +25,7 @@ const formSchema = z.object({
 });
 function AISearchPage() {
   const [aiSearchMutation] = useGetAiSearchedProductsMutation();
-  const secondeSegment = useSegment(2);
-  const screenSize = useScreenSize();
+  const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,24 +36,32 @@ function AISearchPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await aiSearchMutation(values).unwrap();
-      console.log("Response ", response);
-      setProducts(response.products);
+      setIsLoading(true);
+      const response = await aiSearchMutation({
+        prompt: values.prompt,
+        perPage: 4,
+        curPage: 1,
+        outOfStock: false,
+      }).unwrap();
+      console.log("response >>", response);
       successToast(response.message);
+      setProducts(response.products);
     } catch (error: any) {
-      errorToast(error.message);
+      errorToast(error.data.message);
+    } finally {
+      setIsLoading(false);
     }
   }
   return (
     <>
-      {secondeSegment === "account" && screenSize == "sm" ? null : (
-        <Header className="border-b border-neutral-100" />
-      )}
+      <Header className="border-b border-neutral-100" />
       <div
         style={{ height: "calc(100svh - var(--header-height))" }}
-        className="flex flex-col justify-between"
+        className="relative flex flex-col justify-between"
       >
-        <div className="container grid grid-cols-4 p-3 gap-3 mx-auto px-6">
+        {isLoading && <Loader />}
+
+        <div className="container grow grid grid-cols-4 p-3 gap-3 mx-auto px-6">
           {products &&
             products.map((product: IProduct) => (
               <ProductCard key={product._id} product={product} />

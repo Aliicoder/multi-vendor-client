@@ -131,7 +131,7 @@ export interface ICourier {
 }
 
 export interface IAddress {
-  _id: string;
+  _id?: string;
   lng: number;
   lat: number;
   city: string;
@@ -147,6 +147,16 @@ export enum HttpStatus {
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   INTERNAL_SERVER_ERROR = 500,
+}
+
+export interface AuthResponse {
+  user: {
+    userId: string;
+    name: string;
+    avatar: string;
+    roles: Role[];
+    accessToken: string;
+  };
 }
 
 export interface IAuthState {

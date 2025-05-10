@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import store from "./store/index.ts";
 import Contexts from "./Context/Contexts.tsx";
 import { GoogleAuthProvider } from "./components/buttons/GoogleSignIn.tsx";
+import { Toaster } from "react-hot-toast";
 
 const App = lazy(() => import("./App.tsx"));
 
@@ -19,6 +20,12 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/*" element={<App />} />
             </Routes>
           </Suspense>
+          <Toaster
+            toastOptions={{
+              position: "top-right",
+              className: "noOutline",
+            }}
+          />
         </Contexts>
       </Provider>
     </GoogleAuthProvider>

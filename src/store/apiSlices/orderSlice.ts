@@ -2,11 +2,11 @@ import { apiSlice } from "@/store/api/apiSlice";
 export const orderApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchOrders: builder.query({
-      query: ({ userId, limit, page }) => {
+      query: ({ userId, perPage, curPage }) => {
         const queryParams = [
           userId && `userId=${userId}`,
-          limit && `limit=${limit}`,
-          page && `page=${page}`,
+          perPage && `perPage=${perPage}`,
+          curPage && `curPage=${curPage}`,
         ]
           .filter(Boolean)
           .join("&&");

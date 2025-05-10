@@ -1,26 +1,21 @@
 import CustomButton from "@/components/buttons/CustomButton";
 import { useFetchOrdersQuery } from "@/store/apiSlices/orderSlice";
-import dateFormatter from "@/utils/functions/dateFormatter";
 import { IOrder } from "@/types/types";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { currencyFormatter } from "@/utils/functions/currencyFormatter";
-import { FaCaretDown } from "react-icons/fa";
 import { ORDER_STATUS_COLORS } from "@/constants/oreder_status_colors";
-import { cn } from "@/lib/utils";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/store/Reducers/authReducer";
-const limit = 10;
+const perPage = 10;
+const curPage = 1;
 function OrdersPage() {
   const userId = useSelector(selectCurrentUser).userId;
   const navigate = useNavigate();
   const { data: response } = useFetchOrdersQuery(
-    { userId, limit, page: 1 },
+    { userId, perPage, curPage },
     { refetchOnMountOrArgChange: true }
   );
-  console.log("response orders", response);
-  const [openOrderMenuId, setOpenOrderMenuId] = useState("");
-
+  console.log(`response`, response);
   const handleTrackOrder = (order: IOrder, currentStep: number) => {
     navigate(`${order._id}`, { state: { order, currentStep } });
   };
@@ -32,10 +27,10 @@ function OrdersPage() {
         response?.orders?.map((order: IOrder) => (
           <div
             key={order?.productId?._id}
-            className="flex bg-slate-100 flex-col gap-0.5 drop-shadow-sm overflow-hidden rounded-md mt-3 mx-3 shrink-0"
+            className="gap-1 flex border border-neutral-100 flex-col overflow-hidden rounded-md mt-3 mx-3 "
           >
             <div className="flex bg-white">
-              <div className="basis-2/12 bg-neutral-50 relative shrink-0 ">
+              <div className="basis-2/12 bg-blue-50 relative shrink-0 ">
                 <img
                   className="object-cover scale-75"
                   src={order?.productId?.media[0]?.url}
@@ -77,7 +72,7 @@ function OrdersPage() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end p-3 gap-3 bg-white">
+            <div className="flex justify-end p-3 gap-3 bg-blue-50">
               <CustomButton
                 className=" h-9 flex justify-content-center items-center"
                 theme="black"
@@ -88,7 +83,7 @@ function OrdersPage() {
                 onClick={() =>
                   handleTrackOrder(
                     order,
-                    ORDER_STATUS_COLORS[order.status][2] as number
+                    ORDER_STATUS_COLORS[order.deliveryStatus][2] as number
                   )
                 }
                 className=" h-9 flex justify-content-center items-center"

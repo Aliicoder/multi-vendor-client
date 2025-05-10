@@ -14,7 +14,7 @@ const Address = ({ address, bg }: IAddressProps) => {
       )}
     >
       <h1>
-        {address.province},{address.city},{address.street}
+        {address.province} {" > "} {address.city} {" > "} {address.street}
       </h1>
     </div>
   );

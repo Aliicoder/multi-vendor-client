@@ -17,7 +17,7 @@ function ProductsPage() {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col min-h-dvh montserrat">
-      <Header />
+      <Header className="border-b border-neutral-100 " />
 
       <div className="container flex flex-col mx-auto">
         <CustomButton

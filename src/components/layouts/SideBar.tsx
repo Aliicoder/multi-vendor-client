@@ -56,13 +56,12 @@ function Sidebar() {
       </div>
       <button
         onClick={() => navigate("/")}
-        className="flex montserrat items-center gap-3  rounded-l-full text-white  py-3 px-4 bg-blue-500 "
+        className="flex w-1/2 montserrat items-center gap-3 ml-auto 
+        rounded-l-full text-white  py-3 px-4 bg-blue-500 "
       >
         <FaArrowLeft />
-
-        <h3 className=" font-medium ml-2">ons</h3>
       </button>
-      <div className="flex rounded-lg  drop-shadow-sm bg-white border border-neutral-100 mr-5 ">
+      <div className="flex rounded-lg  bg-white border border-neutral-100 mr-5 ">
         <button
           onClick={logoutMutation}
           className="px-3 flex montserrat items-center bg-blue-50 "

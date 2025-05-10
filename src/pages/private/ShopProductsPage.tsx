@@ -15,7 +15,7 @@ function ShopProductsPage() {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col min-h-dvh montserrat mx-auto">
-      <Header />
+      <Header className="border-b border-neutral-100" />
       <div className="container flex flex-col mx-auto">
         <CustomButton
           onClick={() => navigate(`/`)}

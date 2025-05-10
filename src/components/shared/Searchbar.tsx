@@ -50,29 +50,29 @@ function Searchbar() {
                 {product.name}
               </h1>
             ))}
-            {response.suggestions.brands.map((brand: string) => (
+            {response.suggestions.brands.map((brand: string) => {
+              if (brand.length == 0) return;
+              return (
+                <h1
+                  key={brand}
+                  onClick={() => navigate(`/products`, { state: { brand } })}
+                  className="flex bg-white m-1 p-2 rounded-lg cursor-pointer px-4"
+                >
+                  {brand}
+                </h1>
+              );
+            })}
+            {response.suggestions.categories.map((category: string[]) => (
               <h1
-                key={brand}
-                onClick={() => navigate(`/products`, { state: { brand } })}
-                className="flex bg-white m-1 p-2 rounded-lg cursor-pointer px-4"
-              >
-                {brand} brand
-              </h1>
-            ))}
-            {response.suggestions.categories.map((category: ICategory[]) => (
-              <h1
-                key={category[category.length - 1].name}
+                key={category[category.length - 1]}
                 onClick={() =>
-                  navigate(
-                    `/categories/${category[category.length - 1].name}`,
-                    {
-                      state: { category: category[category.length - 1].name },
-                    }
-                  )
+                  navigate(`/categories/${category[category.length - 1]}`, {
+                    state: { category: category[category.length - 1] },
+                  })
                 }
                 className="flex bg-white m-1 p-2 rounded-lg cursor-pointer px-4"
               >
-                {category[category.length - 1].name} category
+                {category[category.length - 1]}
               </h1>
             ))}
           </div>

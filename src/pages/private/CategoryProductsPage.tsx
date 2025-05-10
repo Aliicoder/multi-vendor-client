@@ -16,7 +16,7 @@ function CategoryProductsPage() {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col min-h-screen montserrat">
-      <Header />
+      <Header className="border-b border-neutral-100" />
       <div className="container flex flex-col basis-full mx-auto">
         <CustomButton
           onClick={() => navigate(`/`)}

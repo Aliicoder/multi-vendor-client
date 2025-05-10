@@ -29,7 +29,7 @@ export const mainNavigators: IMainNavigators[] = [
     link: "/account/wishList",
   },
   {
-    title: "addresses",
+    title: "Locations",
     segment: "addresses",
     icon: <MdOutlineAddLocationAlt />,
     link: "/account/addresses",
